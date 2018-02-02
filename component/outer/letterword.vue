@@ -1,16 +1,17 @@
 <template>
     <div>
+        <!-- <xheader />
         <router-view></router-view>
-        <xfooter />
+        <xfooter /> -->
     </div>
   
 </template>
 
 <script>
-    import xfooter from "../common/footer.vue"
+    //import xheader from "../common/xheader.vue"
     export default{
         components:{
-        	xfooter
+            //xfooter
         }
     }
 </script>

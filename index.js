@@ -9,27 +9,26 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 //最外层模块
-import totaltab from "./component/outer/totaltab";
-import reg from "./component/outer/reg";
-import login from "./component/outer/login";
-import goodslist from "./component/outer/goodslist";
-import goodsinfo from "./component/outer/goodsinfo";
-import orderpage from "./component/outer/orderpage";
-import orderpage from "./component/outer/orderpage";
-import sellerlist from "./component/outer/sellerlist";
-import sellerinfo from "./component/outer/sellerinfo";
-import mineinfo from "./component/outer/mineinfo";
-import collet from "./component/outer/collet";
-import letterword from "./component/outer/letterword";
-import assessment from "./component/outer/assessment";
-import addresslist from "./component/outer/addresslist";
-import addressinfo from "./component/outer/addressinfo";
+import totaltab from "./component/outer/totaltab.vue";
+import reg from "./component/outer/reg.vue";
+import login from "./component/outer/login.vue";
+import goodslist from "./component/outer/goodslist.vue";
+import goodsinfo from "./component/outer/goodsinfo.vue";
+import orderpage from "./component/outer/orderpage.vue";
+import sellerlist from "./component/outer/sellerlist.vue";
+import sellerinfo from "./component/outer/sellerinfo.vue";
+import mineinfo from "./component/outer/mineinfo.vue";
+import collet from "./component/outer/collet.vue";
+import letterword from "./component/outer/letterword.vue";
+import assessment from "./component/outer/assessment.vue";
+import addresslist from "./component/outer/addresslist.vue";
+import addressinfo from "./component/outer/addressinfo.vue";
 
 //totaltab的子模块
-import shouye from "./component/totaltab/shouye";
-import classify from "./component/totaltab/classify";
-import shopcar from "./component/totaltab/shopcar";
-import minme from "./component/totaltab/minme";
+import shouye from "./component/totaltab/shouye.vue";
+import classify from "./component/totaltab/classify.vue";
+import shopcar from "./component/totaltab/shopcar.vue";
+import mine from "./component/totaltab/mine.vue";
 
 
 //状态管理
@@ -45,13 +44,13 @@ var router = new VueRouter({
             path: 'index',
             component: shouye
         },{
-            path:"/classify",
+            path:"classify",
             component: classify
         },{
-            path:"/shopcar",
+            path:"shopcar",
             component:shopcar
         },{
-            path:"/minme",
+            path:"mine",
             component:mine
         }]
     }, {
@@ -93,13 +92,17 @@ var router = new VueRouter({
     },{
         path:"/addressinfo",//修改添加收货地址
         component:addressinfo
+    },{
+        path:"/",
+        redirect:"/totaltab/index"
     }]
 })
 
 //配置状态
 var store = new Vuex.Store({
     state:{
-        myId:""
+    	//判断totaltab切换
+        //tabId:0
     }
 })
 

@@ -1,17 +1,21 @@
 <template>
-    <div>
-        <!-- <xheader />
-        <router-view></router-view>
-        <xfooter /> -->
-    </div>
-  
 </template>
 
 <script>
-    //import xheader from "../common/xheader.vue"
-    export default{
-        components:{
-            //xfooter
-        }
+	
+	import Vue from 'vue'
+
+	 export default{
+	 	components:{
+	 		
+	 	},
+    data(){
+      return {
+      	
+		     }
     }
+  }
 </script>
+<style type="text/css">
+
+</style>
