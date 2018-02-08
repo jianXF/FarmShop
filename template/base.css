@@ -5,10 +5,21 @@
     color:#52545E;
 }
 
-html{font-size: 62.5%;}
+html{font-size: 62.5%;background-color: #F6F6F6;}
 html,body{
 	width: 100%;
 	height: 100%;
+}
+a{
+	text-decoration: none;
+}
+li{
+	list-style: none;
+}
+i,em{
+	font-style: normal;
+	font-weight: 500;
+	
 }
 .font-show{
     color:#EE4F4F;

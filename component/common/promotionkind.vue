@@ -3,15 +3,15 @@
 	<div class="promotion">
 		<nav>
 			<p>特价促销</p>
-			<span>更多<i class="iconfont icon-more"></i></span>
+			<a href="#/goodslist">MORE<i class="iconfont icon-more"></i></a>
 		</nav>
 		<ul>
-			<a v-for="i in goods">
+			<a v-for="i in goods" href="#/goodsinfo">
 				<img :src="i.src"  />
 				<h3 v-text="i.name"></h3>
 				<p>
 					<span >￥{{i.price}}</span>
-					<i class="iconfont icon-cart"></i>
+					<i>￥{{i.price}}</i>
 				</p>
 			</a>
 		</ul>
@@ -25,7 +25,7 @@
 			return {
 				goods:[{
 					id:0,
-					name:"手机宽带",
+					name:"手机宽捡垃圾发了基拉对方带",
 					src:src,
 					price:"22"
 				},{
@@ -48,11 +48,9 @@
 .promotion{
 	background-color: white;
 	margin-top: 1.5rem;
-	border-top: 1px solid #d2d2d2;
-	padding-bottom:30rem;
 }
 .promotion>nav{
-	border-left: 0.4rem solid dodgerblue;
+	border-left: 0.4rem solid #FF7223;
 	height: 3rem;
 	line-height: 3rem;
 	display: flex;
@@ -64,8 +62,9 @@
 	font-weight: 800;
 	color: black;
 }
-.promotion>nav>span{
+.promotion>nav>a{
 	font-size: 1.4rem;
+	color: #B3B4B8;
 }
 .promotion>ul{
 	display: flex;
@@ -76,13 +75,11 @@
 	text-align: center;
 	display: flex;
 	flex-direction: column;
-	height:5rem;
 	box-sizing: border-box;
 	padding:0.5rem 0.5rem 0.5rem 1rem ;
 	width:33.3%;
 	
 }
-
 .promotion>ul>a>h3{
 	font-weight: 500;
 	color: #313D44;
@@ -92,17 +89,21 @@
 	width:100%;
 	white-space: pre;
 	overflow: hidden;
-	text-overflow: ellipsis;	
 }
 .promotion>ul>a>p{
-	display: flex;
-	justify-content: space-between;
+	width: 100%;
+	text-align: left;
 }
 .promotion>ul>a>p span{
 	font-size: 2rem;
-	color:#FF0036;
+	color:#EE4F4F;
+	
 }
 .promotion>ul>a>p i{
-
+	text-decoration: line-through;
+	font-style: normal;
+	line-height: 1.5rem;
+	color: #A0A0A0;
+	
 }
 </style>

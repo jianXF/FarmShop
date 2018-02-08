@@ -25,10 +25,10 @@
       	imgsrc:[src1,src2],
 		swiperOption: { //以下配置不懂的，可以去swiper官网看api，链接http://www.swiper.com.cn/api/
 		        notNextTick: true, 
-		        autoplay: {
-		       	delay:2000,        	
-		       	disableOnInteraction:false        
-		        },
+//		        autoplay: {
+//		       	delay:2000,        	
+//		       	disableOnInteraction:false        
+//		        },
 		        loop: true,
 		        direction: 'horizontal',
 		        grabCursor: true,
@@ -55,8 +55,7 @@
 <style  scoped>
 .swipersrc{
 	width:100%;
-	height:8.5rem;
-	margin-top: 4.2rem;
+	height:20rem;
 }
 .swiper-pagination-bullet-active{
 	background-color:#EE4F4F ;

@@ -1,5 +1,4 @@
 import Vue from "vue";
-import "weui";
 import "./font/iconfont.css";
 import "./template/base.css";
 import $ from "jquery";
@@ -23,6 +22,7 @@ import letterword from "./component/outer/letterword.vue";
 import assessment from "./component/outer/assessment.vue";
 import addresslist from "./component/outer/addresslist.vue";
 import addressinfo from "./component/outer/addressinfo.vue";
+import search from "./component/outer/search.vue";
 
 //totaltab的子模块
 import shouye from "./component/totaltab/shouye.vue";
@@ -93,9 +93,12 @@ var router = new VueRouter({
         path:"/addressinfo",//修改添加收货地址
         component:addressinfo
     },{
+        path:"/search",//搜索页面
+        component:search
+    },{
         path:"/",
         redirect:"/totaltab/index"
-    }]
+    },]
 })
 
 //配置状态

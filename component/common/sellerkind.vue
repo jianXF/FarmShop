@@ -2,13 +2,13 @@
 	<div class="sellerkind">
 		<nav>
 			<p>入住商家</p>
-			<span>更多<i class="iconfont icon-more"></i></span>
+			<a href="#/sellerlist">MORE<i class="iconfont icon-more"></i></a>
 		</nav>
 		<ul>
-			<li v-for="i in seller">
+			<a v-for="i in seller" href="#/sellerinfo">
 				<img :src="i.src"  />
 				<p v-text="i.name"></p>
-			</li>
+			</a>
 		</ul>
 	</div>
 </template>
@@ -52,10 +52,9 @@
 .sellerkind{
 	background-color: white;
 	margin-top: 0.5rem;
-	border-top: 1px solid #d2d2d2;
 }
 .sellerkind>nav{
-	border-left: 0.4rem solid dodgerblue;
+	border-left: 0.4rem solid #FF350E;
 	height: 3rem;
 	line-height: 3rem;
 	display: flex;
@@ -67,8 +66,9 @@
 	font-weight: 800;
 	color: black;
 }
-.sellerkind>nav>span{
+.sellerkind>nav>a{
 	font-size: 1.4rem;
+	color: #B3B4B8;
 }
 .sellerkind>ul{
 	border-left:1px solid #d2d2d2;
@@ -77,7 +77,7 @@
 	margin: 0.5rem;
 	flex-wrap: wrap;
 }
-.sellerkind>ul>li{
+.sellerkind>ul>a{
 	border-right:1px solid #d2d2d2;
 	border-bottom:1px solid #d2d2d2;
 	text-align: center;
@@ -88,13 +88,13 @@
 	line-height: 4rem;
 	width:33.3%;
 }
-.sellerkind>ul>li img{
+.sellerkind>ul>a img{
 	flex: 1;
 	width: 3rem;
 	height:3rem;
 	margin: auto;
 }
-.sellerkind>ul>li p{
+.sellerkind>ul>a p{
 	flex: 2;
 	font-size: 1.2rem;
 	color:black;

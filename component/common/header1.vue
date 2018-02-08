@@ -1,7 +1,7 @@
 <template>
 	<header class="cminfo">
 		<p v-text="message"></p>
-		<i class="iconfont icon-category"></i>
+		<!--<i class="iconfont icon-category"></i>-->
 	</header>
 </template>
 
@@ -16,6 +16,10 @@
 	height:4.1rem;
 	background-color: #EE4F4F;
 	line-height:4.1rem;
+	position: fixed;
+	top:0;
+	left:0;
+	width: 100%;
 	
 }
 .cminfo>p{

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <footer class="tablist">
+        <footer class="tablist" style="overflow: hidden;">
             <a v-for="i in arr" @click="selectTab(i.id)" :href="i.href">
                 <i :class="i.font" :style="{color:sumId==i.id?'#EE4F4F':'#52545E',fontWeight:sumId==i.id?'700':'500' }"></i>
                 <span v-text="i.name" :style="{color:sumId==i.id?'#EE4F4F':'#52545E'}">首页</span>
@@ -47,6 +47,7 @@
 </script>
 <style scoped>
 .tablist{
+	z-index: 10;
 	background-color: white;
 	position:fixed;
 	bottom:0px;

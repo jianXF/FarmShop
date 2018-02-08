@@ -1,10 +1,10 @@
 	<!--首页商品分类-->
 <template>
 		<section class="sumkind">
-			<p v-for="i in arr">
-				<img :src="i.src" />
+				<a href="#/goodsinfo" v-for="i in arr">
+					<img :src="i.src" />
 				<span v-text="i.name"></span>
-			</p>
+				</a>
 		</section>
 </template>
 <script>
@@ -22,35 +22,35 @@ import src8 from "../../img/list8.png";
 				arr:[{
 					id:0,
 					name:"特价促销",
-					src:src1,
+					src:src1
 				},{
 					id:1,
 					name:"干果零食",
-					src:src2,
+					src:src2
 				},{
 					id:2,
 					name:"绿色水果",
-					src:src3,
+					src:src3
 				},{
 					id:3,
 					name:"有机蔬菜",
-					src:src4,
+					src:src4
 				},{
 					id:4,
 					name:"优质家禽",
-					src:src5,
+					src:src5
 				},{
 					id:5,
 					name:"柴米油盐",
-					src:src6,
+					src:src6
 				},{
 					id:6,
 					name:"手工制品",
-					src:src7,
+					src:src7
 				},{
 					id:7,
 					name:"当地特产",
-					src:src8,
+					src:src8
 				}]
 			}
 		}
@@ -64,20 +64,19 @@ import src8 from "../../img/list8.png";
 		padding:0.5rem;
 		padding-top: 0;
 		background-color: #fbfbfb;
-		margin-top: 0.5rem;
 	}
-	.sumkind>p{
+	.sumkind>a{
 		width: 25%;
 		display: flex;
 		flex-direction: column;
 		text-align: center;
 	}
-	.sumkind>p>img{
+	.sumkind>a img{
 		width:4.5rem;
 		margin: 0 auto;
 		margin-top: 0.5rem;
 	}
-	.sumkind>p>span{
+	.sumkind>a span{
 		margin-top: 0.25rem;
 		font-size: 1.3rem;
 	}
