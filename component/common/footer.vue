@@ -75,5 +75,4 @@
 	flex:1;
 	line-height: 1.55rem;
 }
-
 </style>
