@@ -3,6 +3,9 @@ import "./font/iconfont.css";
 import "./template/base.css";
 import $ from "jquery";
 import "jquery.cookie";
+import Vant from 'vant';
+import 'vant/lib/vant-css/index.css';
+Vue.use(Vant);
 //路由
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
@@ -104,6 +107,8 @@ var router = new VueRouter({
 //配置状态
 var store = new Vuex.Store({
     state:{
+        //设置订单页面是哪五种情况
+        selectOrder:2
     	//判断totaltab切换
         //tabId:0
     }

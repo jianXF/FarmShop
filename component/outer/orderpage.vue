@@ -11,7 +11,7 @@
 			<a href="#/collet"><i class="iconfont icon-favorites"></i><p>我的收藏</p></a>
 		</div>
         <header>
-        	<div><i class="iconfont icon-back"></i>
+        	<div><a href="#/totaltab/mine" class="iconfont icon-back"></a>
         	<p >我的订单</p></div>
         	<i class="iconfont icon-category" @click="changetips"></i>
         </header>
@@ -174,6 +174,7 @@
         	}
         },
         methods:{
+			
         	////选择选项卡，显示不同信息
         	changeXtab(id){
         		this.xtab=id;
@@ -193,7 +194,11 @@
 	       cancalAdd(){
 	       	this.carbool=false;
 	       }
-        }
+		},
+		mounted(){
+			this.xtab=this.$store.state.selectOrder;
+			
+		}
     }
 </script>
 <style scoped>
@@ -213,7 +218,7 @@
 	width:45%;
 	display: flex;
 }
-#orderpage>header>div>i{
+#orderpage>header>div>a{
 	width:30%;
 	line-height: 4.6rem;
 	font-size: 2.5rem;

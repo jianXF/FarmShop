@@ -1,5 +1,6 @@
 <template>
     <div style="background-color: #F6F6F6;padding-bottom: 3.8rem;">
+
     	<xheader :message="title"/>
 		<div class="myhead">
 			<img  :src="src" />
@@ -8,7 +9,7 @@
 		<div class="order">
 			<p><span>全部订单</span><a href="#/orderpage">查看全部订单<i class="iconfont icon-more"></i></a></p>
 			<section>
-				<a v-for="i in arr">
+				<a v-for="i in arr" @click="changeSelectOrder(i.id)">
 					<i :class="i.icon"></i>
 					<span v-text="i.name"></span>
 					<em>0</em>
@@ -20,8 +21,7 @@
 			<a href="#/collet"><span><i class="iconfont icon-favorites" style="background-color: #FCBA19;"></i>我的收藏</span><span >商品收藏/店铺收藏<i class="iconfont icon-more"></i></span></a>
 			<a href="#/addresslist"><span><i class="iconfont icon-auto" style="background-color: #71A1FD;"></i>收货地址</span><span >添加/修改<i class="iconfont icon-more"></i></span></a>
 			<a href="#/letterword"><span><i class="iconfont icon-comments" style="background-color: #43CA5E;"></i>我的反馈</span><span >投诉/留言<i class="iconfont icon-more"></i></span></a>
-			<a href="#/orderpage"><span><i class="iconfont icon-refresh" style="background-color: #3FC1FF;"></i>注销登录</span><span ><i class="iconfont icon-more"></i></span></a>
-			
+			<a href=""><span><i class="iconfont icon-refresh" style="background-color: #3FC1FF;"></i>注销登录</span><span ><i class="iconfont icon-more"></i></span></a>
 		</div>
     </div>
 </template>
@@ -29,6 +29,7 @@
 <script>
 	import src from "../../img/user.jpg";
     import xheader from "../common/header1.vue"
+
     export default{
         components:{
             xheader
@@ -38,28 +39,34 @@
         		title:"我的",
         		src:src,
         		arr:[{
-        			id:0,
+        			id:1,
         			name:"待付款",
         			icon:"iconfont icon-box",
         			bool:false
         		},{
-        			id:1,
+        			id:2,
         			name:"待发货",
         			icon:"iconfont icon-productfeatures",
         			bool:false
         		},{
-        			id:2,
+        			id:3,
         			name:"待收货",
         			icon:"iconfont icon-similarproduct",
         			bool:false
         		},{
-        			id:3,
+        			id:4,
         			name:"待评价",
         			icon:"iconfont icon-edit",
         			bool:false
         		}]
         	}
-        }
+		},
+		methods:{
+			 changeSelectOrder(id){
+				this.$store.state.selectOrder=id+1;
+				this.$router.push({path:'/orderpage'});
+			 }
+		}
     }
 </script>
 <style scoped>
