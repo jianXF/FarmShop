@@ -8,6 +8,7 @@
             />
         </div>
         <van-address-edit
+        :addressInfo='addressInfo'
             style="marginTop:46px"
             :area-list="areaList"
             show-delete
@@ -15,7 +16,6 @@
             show-search-result
             @save="onSave"
             @delete="onDelete"
-            values={name:sds}
         />
     </div>
   
@@ -29,6 +29,10 @@
         },
         data() {
             return {
+                name:"jian",
+               addressInfo:{
+                   name:'jian'
+               },
             areaList:{
                 province_list: {
                     110000: '重庆市'

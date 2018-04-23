@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="header_top">
-        <van-nav-bar
-                
-                title="管理收货地址"
-                left-arrow
-                @click-left="onClickLeft"
-        />
+            <van-nav-bar
+                    
+                    title="管理收货地址"
+                    left-arrow
+                    @click-left="onClickLeft"
+            />
         </div>
 
         <van-address-list
@@ -29,7 +29,7 @@
         data(){
             return {
                 //选择收货地址
-                chosenAddressId: '1',
+                chosenAddressId: '2',
                 //数据列表
                 list: [
                     {
@@ -60,6 +60,8 @@
             //编辑收货地址
             onEditAddress(item, index) {
                 console.log(item, index);
+                this.$store.state.selectAddress=item;
+                this.$router.push({path:'/updateressinfo'});
             }
         }
     }

@@ -25,6 +25,7 @@ import letterword from "./component/outer/letterword.vue";
 import assessment from "./component/outer/assessment.vue";
 import addresslist from "./component/outer/addresslist.vue";
 import addressinfo from "./component/outer/addressinfo.vue";
+import updateressinfo from "./component/outer/updateressinfo.vue";
 import search from "./component/outer/search.vue";
 
 //totaltab的子模块
@@ -93,8 +94,11 @@ var router = new VueRouter({
         path:"/addresslist",//收货地址列表页
         component:addresslist
     },{
-        path:"/addressinfo",//修改添加收货地址
+        path:"/addressinfo",//添加收货地址
         component:addressinfo
+    },{
+        path:"/updateressinfo",//修改收货地址
+        component:updateressinfo
     },{
         path:"/search",//搜索页面
         component:search
@@ -108,7 +112,9 @@ var router = new VueRouter({
 var store = new Vuex.Store({
     state:{
         //设置订单页面是哪五种情况
-        selectOrder:2
+        selectOrder:1,
+        //从收货地址页面跳转到详情
+        selectAddress:null
     	//判断totaltab切换
         //tabId:0
     }
