@@ -9,7 +9,7 @@
                 @click-left="onClickLeft"
         />
         </div>
-        <van-tabs v-model="active" style="marginTop:46px">
+        <van-tabs  style="marginTop:46px">
             <van-tab  :title="'宝贝'">
                 <xgoodlist />
             </van-tab>

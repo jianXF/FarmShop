@@ -42,6 +42,7 @@
     "weui": "^1.1.2"
   },
   "dependencies": {
+    "vant": "^1.0.8",
     "vue-router": "^3.0.1"
   }
 }

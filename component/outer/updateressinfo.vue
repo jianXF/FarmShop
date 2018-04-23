@@ -1,36 +1,22 @@
 <template>
     <div>
-       <div class="header_top">
+        <div class="header_top">
             <van-nav-bar
                     title="编辑收货地址"
                     left-arrow
                     @click-left="onClickLeft"
             />
         </div>
-        <van-cell-group style="marginTop:46px">
-            <van-field
-                v-model="listDetail.name"
-                label="收货人"
-                icon="clear"
-                placeholder="请输入收货人姓名"
-                @click-icon="listDetail.name = ''"
-            />
-
-            <van-field
-                v-model="listDetail.tel"
-                type="tel"
-                label="联系电话"
-                icon="clear"
-                placeholder="请联系电话"
-                @click-icon="listDetail.tel = ''"
-                
-            />
-            <van-field
-                label="手机号"
-                placeholder="请输入手机号"
-                v-model="address"
-            />
-        </van-cell-group>
+        <van-address-edit
+        :addressInfo='addressInfo'
+            style="marginTop:46px"
+            :area-list="areaList"
+            show-delete
+            show-set-default
+            show-search-result
+            @save="onSave"
+            @delete="onDelete"
+        />
     </div>
   
 </template>
@@ -43,10 +29,16 @@
         },
         data() {
             return {
-            //收货地址详情
-            listDetail:null,
-            //地区名字
-            address:'重庆',
+               addressInfo:{
+                   name:'jian',
+                   tel:'15038438594',
+                   province:'重庆市',
+                   city:'重庆市',
+                   county:'九龙坡区',
+                   address_detail:'石坪桥冶金三寸',
+                   area_code:'110101',
+                   is_default:'true'
+               },
             areaList:{
                 province_list: {
                     110000: '重庆市'
@@ -81,12 +73,7 @@
             onDelete() {
             console.log('delete');
             }
-        },
-        mounted(){
-            this.listDetail=this.$store.state.selectAddress;
-            console.log(this.listDetail);
         }
-
     }
 </script>
 <style>

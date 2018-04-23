@@ -28,3 +28,7 @@ i,em{
 .van-nav-bar>.van-nav-bar__left .van-icon{
 	color:#52545E;
 }
+.van-button__text{
+		font-size: 1.6rem;
+		color: white;
+	}
