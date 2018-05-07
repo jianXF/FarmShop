@@ -66,7 +66,7 @@
 	margin: auto 0;
 	font-size: 2rem;
 	width: 90%;
-
+	height: 100%;
 }
 .search>header>p:last-of-type{
 	width:20%;

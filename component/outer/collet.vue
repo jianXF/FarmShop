@@ -14,7 +14,7 @@
                 <xgoodlist />
             </van-tab>
             <van-tab  :title="'店铺'">
-                <xgoodlist />
+                <xselllist />
             </van-tab>
         </van-tabs>
     </div>
@@ -22,10 +22,12 @@
 </template>
 
 <script>
-    import xgoodlist from "../common/goodlist.vue"
+    import xgoodlist from "../common/goodlist.vue";
+    import xselllist from "../common/selllist.vue";
     export default{
         components:{
-            xgoodlist
+            xgoodlist,
+            xselllist
         },
         data(){
             return{

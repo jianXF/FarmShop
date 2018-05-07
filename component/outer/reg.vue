@@ -6,7 +6,11 @@
 		  @click-left="onClickLeft"
 		/>
         <img :src="src" class="heaer_img"/>
-        <van-cell-group>
+		
+		<van-uploader :after-read="onRead" class="load_img">
+			<img :src="head_src" class="load_img">
+		</van-uploader>
+        <van-cell-group style="marginTop:2rem">
 		  <van-field
 		  	style=''
 		    v-model="tel"
@@ -18,6 +22,16 @@
 		    @click-icon="tel = ''"
 		    :error-message='tip'
 		    @input='checkTel'
+		  />
+		  <van-field
+		    v-model="password"
+		    type="password"
+		    label="密码"
+		    icon="clear"
+		    @click-icon="password = ''"
+		    placeholder="请输入密码"
+		    :error-message='tip.phone'
+		    required
 		  />
 		</van-cell-group>
 		<van-button  type='primary' style='marginTop:1rem' @click='loginSubmit'>登  录</van-button>
@@ -39,8 +53,10 @@
         data(){
         	return {
         		src:src,
-        		tel:'',
-        		tip:''
+				tel:'',
+				password:'',
+				tip:'',
+				head_src:src
         	}
         },
         methods:{
@@ -54,7 +70,11 @@
         		}else{
         			this.tip='';
         		}
-        	},
+			},
+			//上传头像事件
+			 onRead(file) {
+				this.head_src = file.content;
+			},
         	//登陆事件
         	loginSubmit(){
         		
@@ -68,6 +88,16 @@
 		width:100%;
 		height:22rem;
 		
+	}
+	.load_img{
+		position: fixed;
+		top:19rem;
+		width:5rem;
+		height: 5rem;
+		border-radius: 50%;
+		border: 1px solid white;
+		left:50%;
+		margin-left: -2.5rem;
 	}
 	.van-button--primary{
 		background-color:#EE4F4F ;

@@ -2,7 +2,7 @@
 <template>
 	<div>
 		<div class="back" :style="{display: tipsbool==true?'block':'none'}" @click="changeHide"></div>
-	<div class="tips" :style="{display: tipsbool==true?'block':'none'}">
+		<div class="tips" :style="{display: tipsbool==true?'block':'none'}">
 		<a href="#/totaltab/shouye"><i class="iconfont icon-store"></i><p>首页</p></a>
 		<a href="#/totaltab/shopcar"><i class="iconfont icon-cart"></i><p>购物车</p></a>
 		<a href="#/letterword"><i class="iconfont icon-comments"></i><p>我的反馈</p></a>
@@ -88,6 +88,7 @@
 	font-size: 2rem;
 	width: 90%;
 	background-color: #fbfbfb;
+	margin-top:-1px;
 }
 .goodslist>header>p{
 	width:10%;

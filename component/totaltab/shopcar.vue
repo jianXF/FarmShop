@@ -2,7 +2,7 @@
     <div class="shopcar">
         <xheader :message="title"/>
         <ul>
-        	<li v-for="i in goods">
+        	<li v-for="i in goods" @touchstart="Loop_Sub(i)" @touchend="clearLoop()">
         		<span :class="i.bool==true?'iconfont icon-gou span_c':'iconfont icon-gou'" @click="changebool(i.id)"></span>
         		<a href=""><img :src="i.src"/></a>
         		<div>
@@ -26,7 +26,9 @@
 
 <script>
 	import src from "../../img/user.jpg";
-    import xheader from "../common/header1.vue"
+	import xheader from "../common/header1.vue";
+	import Vant from 'vant';
+	import { Dialog } from 'vant';
     export default{
         components:{
             xheader
@@ -35,7 +37,8 @@
         	return {
         		title:"购物车",
         		xbool:true,
-        		sumprice:0,
+				sumprice:0,
+				Loop:null,
         		goods:[{
         			id:1,
         			name:"了空间发的科技哈罗德看见了哈的框架快乐就按何时可掇",
@@ -109,14 +112,28 @@
     				}
     			}
 			}	
-        }
+		},
+		//购物车列表的长按事件，是否删除
+		Loop_Sub(val){
+			clearInterval(this.Loop);//再次清空定时器，防止重复注册定时器
+			this.Loop=setInterval(function(){
+				Dialog.confirm({
+					title: '是否删除该商品'
+				}).then(() => {
+				// on confirm
+				}).catch(() => {
+				// on cancel
+				});
+　　　　　　},1000);
+		},
+		//清空定时器
+		clearLoop:function(){
+　　　　　　clearInterval(this.Loop);
+　　　　}
         }
     }
 </script>
 <style scoped>
-	.shopcar{
-		
-	}
 	.shopcar>ul{
 		display: flex;
 		flex-direction: column;

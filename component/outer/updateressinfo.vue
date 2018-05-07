@@ -37,7 +37,7 @@
                    county:'九龙坡区',
                    address_detail:'石坪桥冶金三寸',
                    area_code:'110101',
-                   is_default:'true'
+                   is_default:true
                },
             areaList:{
                 province_list: {
@@ -76,7 +76,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
 .header_top{
     position: fixed;
     top:0;

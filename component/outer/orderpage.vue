@@ -132,6 +132,7 @@
         				<i class="iconfont icon-more"></i>
         			</p>
         			<span>卖家已发货</span>
+					
         		</header>
         		<div class="center">
         			<img :src='src' />
@@ -149,6 +150,7 @@
         			</div>
         		</div>
         		<footer>
+					<span>评价</span>
         			<span>确认收货</span>
         		</footer>
         	</div>      
@@ -361,6 +363,7 @@ section>.p_c{
 	font-weight: 800;
 	border:1px solid  #FF9D70;/*#D8D8D8*/
 	padding: 0 0.5rem;
+	margin-left:1rem;
 }
 .con>.nothing{
 	height:20rem;

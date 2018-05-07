@@ -10,6 +10,7 @@ Vue.use(Vant);
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+
 //最外层模块
 import totaltab from "./component/outer/totaltab.vue";
 import reg from "./component/outer/reg.vue";

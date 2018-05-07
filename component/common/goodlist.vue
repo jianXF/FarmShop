@@ -16,7 +16,7 @@
 	</ul>
 </template>
 
-<script>
+<script scoped>
 	import src from "../../img/user.jpg";
 	export default{
 		data(){

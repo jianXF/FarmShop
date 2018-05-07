@@ -8,7 +8,7 @@
 html{font-size: 62.5%;background-color: #F6F6F6;}
 html,body{
 	width: 100%;
-	height: 100%;
+	
 }
 a{
 	text-decoration: none;
@@ -28,7 +28,37 @@ i,em{
 .van-nav-bar>.van-nav-bar__left .van-icon{
 	color:#52545E;
 }
-.van-button__text{
+.letterword .van-button__text{
 		font-size: 1.6rem;
 		color: white;
 	}
+.assessment .van-nav-bar__text{
+	color:tomato;
+	font-size: 1.6rem;
+}
+.van-cell__title span{
+	font-size: 1.5rem;
+}
+.selllist .van-button__text{
+	color: #EE4F4F;
+	font-size: 1.4rem;
+}
+.selllist .van-card{
+	border-bottom: 1px solid #F6F6F6;
+	margin-top: 0;
+}
+.selllist .van-card:not(:first-child){
+	margin-top: 0px;
+}
+.selllist .van-card__row{
+    margin-top: 0.8rem;
+}
+.selllist .van-card__title{
+    font-size: 1.5rem;
+}
+.selllist .van-card__footer{
+    bottom: 15px;
+}
+.sellcollet .van-card__footer{
+	bottom: 3rem;
+}
