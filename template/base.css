@@ -62,3 +62,26 @@ i,em{
 .sellcollet .van-card__footer{
 	bottom: 3rem;
 }
+/* 轻提示样式 */
+.van-toast>div{
+	color:white;
+}
+.van-toast>.van-icon{
+	color:white;
+}
+.van-button .van-button__text,.van-toast .van-button__text{
+	color:white;
+	font-size: 1.4rem;
+}
+/* 弹框头部 */
+.van-dialog__header{
+	font-size: 1.7rem;
+}
+/* 弹框内容  */
+.van-dialog__message{
+
+}
+.van-dialog .van-button__text{
+	color:#52545E;
+	font-size: 1.4rem;
+}

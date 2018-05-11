@@ -3,8 +3,8 @@
 
     	<xheader :message="title"/>
 		<div class="myhead">
-			<img  :src="src" />
-			<p>asdkasdaks</p>
+			<img  :src="mine.logo" />
+			<p v-text="mine.tel"></p>
 		</div>
 		<div class="order">
 			<p><span>全部订单</span><a href="#/orderpage">查看全部订单<i class="iconfont icon-more"></i></a></p>
@@ -21,15 +21,15 @@
 			<a href="#/collet"><span><i class="iconfont icon-favorites" style="background-color: #FCBA19;"></i>我的收藏</span><span >商品收藏/店铺收藏<i class="iconfont icon-more"></i></span></a>
 			<a href="#/addresslist"><span><i class="iconfont icon-auto" style="background-color: #71A1FD;"></i>收货地址</span><span >添加/修改<i class="iconfont icon-more"></i></span></a>
 			<a href="#/letterword"><span><i class="iconfont icon-comments" style="background-color: #43CA5E;"></i>我的反馈</span><span >投诉/留言<i class="iconfont icon-more"></i></span></a>
-			<a href=""><span><i class="iconfont icon-refresh" style="background-color: #3FC1FF;"></i>注销登录</span><span ><i class="iconfont icon-more"></i></span></a>
+			<a @click="quitUser"><span><i class="iconfont icon-refresh" style="background-color: #3FC1FF;"></i>注销登录</span><span ><i class="iconfont icon-more"></i></span></a>
 		</div>
     </div>
 </template>
 
 <script>
-	import src from "../../img/user.jpg";
-    import xheader from "../common/header1.vue"
-
+	import xheader from "../common/header1.vue";
+	import Vant from 'vant';
+	import { Toast  } from 'vant';
     export default{
         components:{
             xheader
@@ -37,7 +37,10 @@
         data(){
         	return {
         		title:"我的",
-        		src:src,
+				mine:{
+					logo:'',
+					tel:''
+				},
         		arr:[{
         			id:1,
         			name:"待付款",
@@ -65,7 +68,16 @@
 			 changeSelectOrder(id){
 				this.$store.state.selectOrder=id+1;
 				this.$router.push({path:'/orderpage'});
+			 },
+			 quitUser(){
+				 sessionStorage.clear();
+				 Toast.success('退出成功');
+				 this.$router.push({path:'/totaltab/index'});
 			 }
+		},
+		mounted(){
+			this.mine.logo = sessionStorage.getItem('logo');
+			this.mine.tel = sessionStorage.getItem('tel');
 		}
     }
 </script>

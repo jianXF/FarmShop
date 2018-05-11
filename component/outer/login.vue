@@ -9,14 +9,15 @@
         <van-cell-group>
 		  <van-field
 		  	style=''
-		    v-model="username"
+		    v-model="tel"
 		    label="手机号"
 		    type='tel'
 		    icon="clear"
 		    placeholder="请输入手机号"
 		    required
-		    @click-icon="username = ''"
+		    @click-icon="tel = ''"
 		    :error-message='tip.tel'
+			@input='checkTel'
 		  />
 		
 		  <van-field
@@ -26,7 +27,8 @@
 		    icon="clear"
 		    @click-icon="password = ''"
 		    placeholder="请输入密码"
-		    :error-message='tip.phone'
+		    :error-message='tip.pass'
+			@input='checkPass'
 		    required
 		  />
 		</van-cell-group>
@@ -40,8 +42,10 @@
 </template>
 
 <script>
+	import $ from "jquery";
 	import src from "../../img/user.jpg";
-    //import xheader from "../common/xheader.vue"
+	import Vant from 'vant';
+	import { Toast  } from 'vant';
     export default{
         components:{
             //xfooter
@@ -49,11 +53,11 @@
         data(){
         	return {
         		src:src,
-        		username:'',
+        		tel:'',
         		password:'',
         		tip:{
 					tel:'',
-					phone:''
+					pass:''
 				}
         	}
         },
@@ -61,11 +65,50 @@
         	//点击头部标题返回主页
         	onClickLeft(){
         		this.$router.push({path:'/totaltab/index'});
-        	},
+			},
+			//核对手机号
+        	checkTel(){
+        		if(!/^[1]\d{10}$/.test(this.tel)){
+        			this.tip.tel='手机号输入错误，请重新输入';
+        		}else{
+        			this.tip.tel='';
+        		}
+			},
+			//核对密码
+			checkPass(){
+				if(!/^\w{8,12}$/.test(this.password)){
+        			this.tip.pass='密码格式为8-12位的非特殊符号，请重新输入';
+        		}else{
+        			this.tip.pass='';
+        		}
+			},
         	//登陆事件
-        	loginSubmit(){
-        		this.tip.tel='手机号输入错误，请重新输入';
-        		this.tip.phone='密码输入错误，请重新输入';
+        	async loginSubmit(){
+				const _this = this;
+        		if(this.tel && this.password){
+					await $.ajax({
+						url:"http://localhost:2014/reg/login",
+						type:"POST",
+						data:{
+							tel:_this.tel,
+							password:_this.password
+						},
+						success:function(data){
+							if(data.code==0){
+								sessionStorage.setItem('userId',data.data.userId);
+								sessionStorage.setItem('tel',data.data.tel);
+								sessionStorage.setItem('logo',data.data.img);
+								Toast.success(data.meaasge);
+								_this.$router.push({path:'/totaltab/index'});
+							}else{
+								Toast.fail(data.meaasge);
+							}
+							
+						}
+					})
+				}else{
+					Toast('请输入注册的手机号和密码');
+				}
         	}
         }
     }
