@@ -10,19 +10,20 @@
 	</div>
     <div class="goodslist">
         <header>
-        	<a href="#/totaltab/index" class="iconfont icon-back"></a>
+        	<a @click="goback" class="iconfont icon-back"></a>
         	<a href="#/search">
         		<input type="text"/>
         	</a>
         	<p class="iconfont icon-category" @click="changetips"></p>
         </header>
         <nav>
-        	<p :class="xtab==1?'font-show':' '" @click="changeXtab(1)">最新</p>
-        	<p :class="xtab==2?'font-show':' '" @click="changeXtab(2)">销量</p>
-        	<p :class="xtab==3?'font-show':' '" @click="changeXtab(3)">价格<i :class="xtab==3?'iconfont icon-moreunfold i_c':'iconfont icon-moreunfold'"></i></p>
-        	<p :class="xtab==4?'font-show':' '" @click="changeXtab(4)">价格<i :class="xtab==4?'iconfont icon-less i_c':'iconfont icon-less'"></i></p>
+        	<p :class="xtab==1?'font-show':' '" @click="changeXtab('1')">最新</p>
+        	<p :class="xtab==2?'font-show':' '" @click="changeXtab('2')">销量</p>
+        	<p :class="xtab==3?'font-show':' '" @click="changeXtab('3')">价格<i :class="xtab==3?'iconfont icon-less i_c':'iconfont icon-less'"></i></p>
+        	<p :class="xtab==4?'font-show':' '" @click="changeXtab('4')">价格<i :class="xtab==4?'iconfont icon-moreunfold i_c':'iconfont icon-moreunfold'"></i></p>
         </nav>
-        <xgoodlist style="padding-top:8.1rem"/>
+        <xgoodlist style="padding-top:8.1rem" :goodsArr="goodsArr" />
+
         <p class="nonegood">亲，已经没有商品了哦</p>
     </div>
 	</div>
@@ -30,6 +31,7 @@
 </template>
 
 <script>
+	import $ from "jquery";
     import xgoodlist from "../common/goodlist.vue"
     export default{
         components:{
@@ -37,15 +39,144 @@
         },
         data(){
         	return {
-        		xtab:1,
-        		tipsbool:false
+        		xtab:'1',
+				tipsbool:false,
+				goodsArr:[]
         	}
         },
-       
+        async mounted(){
+		   const _this = this;console.log(this.$router.history.current.query);
+		   if(location.href.includes('?')){
+			  var type = this.$router.history.current.query.type;
+			  var values = this.$router.history.current.query.value;
+			  switch(type){
+				  case 'kindId':
+						await $.ajax({
+							url:"http://localhost:2014/find/goods/kindId",
+							type:"GET",
+							data:{
+								kindId:values,
+								xtab:_this.xtab
+							},
+							success:function(data){
+								_this.goodsArr=data;
+								console.log(data);
+							}
+						});
+						break;
+					case 'isBargain':
+						await $.ajax({
+							url:"http://localhost:2014/find/goods/isBargain",
+							type:"GET",
+							data:{
+								xtab:_this.xtab
+							},
+							success:function(data){
+								_this.goodsArr=data;
+								console.log(data);
+							}
+						});
+						break;
+					case 'oId':
+						await $.ajax({
+							url:"http://localhost:2014/find/goods/oId",
+							type:"GET",
+							data:{
+								xtab:_this.xtab,
+								oId:values
+							},
+							success:function(data){
+								_this.goodsArr=data;
+								console.log(data);
+							}
+						});
+						break;
+					case 'title':
+							await $.ajax({
+								url:"http://localhost:2014/find/goods/title",
+								type:"GET",
+								data:{
+									xtab:_this.xtab,
+									title:this.$router.history.current.query.value
+								},
+								success:function(data){
+									_this.goodsArr=data;
+								}
+							});
+							break;
+			  }
+			  
+		   }
+		   
+		   
+	   },
         methods:{ 
         	//点击不同的排序方式
-        	changeXtab(id){
-        		this.xtab=id;
+        	async changeXtab(id){
+				this.xtab=id;
+				const _this =this;
+				
+			if(location.href.includes('?')){
+			  var type = this.$router.history.current.query.type;
+			  var values = this.$router.history.current.query.value;
+			  switch(type){
+				  case 'kindId':
+						await $.ajax({
+							url:"http://localhost:2014/find/goods/kindId",
+							type:"GET",
+							data:{
+								kindId:values,
+								xtab:_this.xtab
+							},
+							success:function(data){
+								_this.goodsArr=data;
+								console.log(data);
+							}
+						});
+						break;
+					case 'isBargain':
+						await $.ajax({
+							url:"http://localhost:2014/find/goods/isBargain",
+							type:"GET",
+							data:{
+								xtab:_this.xtab
+							},
+							success:function(data){
+								_this.goodsArr=data;
+								console.log(data);
+							}
+						});
+						break;
+					case 'oId':
+						await $.ajax({
+							url:"http://localhost:2014/find/goods/oId",
+							type:"GET",
+							data:{
+								xtab:_this.xtab,
+								oId:values
+							},
+							success:function(data){
+								_this.goodsArr=data;
+								console.log(data);
+							}
+						});
+						break;
+					case 'title':
+							await $.ajax({
+								url:"http://localhost:2014/find/goods/title",
+								type:"GET",
+								data:{
+									xtab:_this.xtab,
+									title:this.$router.history.current.query.value
+								},
+								success:function(data){
+									_this.goodsArr=data;
+								}
+							});
+							break;
+			  }
+			  
+		   }
         	},
         	//点击头部右边选择功能
         	changetips(){
@@ -54,7 +185,10 @@
         	//功能卡显示，点击back隐藏
         	changeHide(){
         		this.tipsbool=false;
-        	}
+			},
+			goback(){
+				 this.$router.go(-1);
+			}
         }
     }
 </script>

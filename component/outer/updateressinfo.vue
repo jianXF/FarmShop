@@ -12,7 +12,6 @@
             style="marginTop:46px"
             :area-list="areaList"
             show-delete
-            show-set-default
             show-search-result
             @save="onSave"
             @delete="onDelete"
@@ -23,55 +22,82 @@
 
 <script>
     //import xheader from "../common/xheader.vue"
+    import $ from "jquery";
+    import areaDate from "../address.json";
+    	import Vant from 'vant';
+	import { Dialog,Toast } from 'vant';
     export default{
         components:{
             //xfooter
         },
         data() {
             return {
-               addressInfo:{
-                   name:'jian',
-                   tel:'15038438594',
-                   province:'重庆市',
-                   city:'重庆市',
-                   county:'九龙坡区',
-                   address_detail:'石坪桥冶金三寸',
-                   area_code:'110101',
-                   is_default:true
-               },
-            areaList:{
-                province_list: {
-                    110000: '重庆市'
-                },
-                city_list: {
-                    110100: '重庆市',
-                    110200: '区县',
-                },
-                county_list: {
-                    110101: '九龙坡区',
-                    110102: '沙坪坝区',
-                    110105: '大渡口区',
-                    110106: '南岸区',
-                    110201: '忠县',
-                    110202: '万州县',
-
-                }
+               addressInfo:{},
+                areaList:areaDate
             }
-            }
+        },
+        async mounted(){
+            const _this= this;
+            await $.ajax({
+				url:"http://localhost:2014/address/findId",
+				type:"GET",
+				data:{
+					addressId:this.$router.history.current.query.addressId
+				},
+				success:function(data){
+                    _this.addressInfo = data;
+				}
+			});
         },
 
         methods: {
             //标题点击事件
             onClickLeft(){
-                this.$router.push({path:'/addresslist'});
+                this.$router.go(-1);
             },
             //保存地址
-            onSave(content) {
-            console.log(content);
+            async onSave(content) {
+                const _this =this;
+                await $.ajax({
+                    url:"http://localhost:2014/address/update",
+                    type:"POST",
+                    data:{
+                        addressId:_this.$router.history.current.query.addressId,
+                        name:content.name,
+                        tel:content.tel,
+                        province:content.province,
+                        city:content.city,
+                        county:content.county,
+                        address_detail:content.address_detail,
+                        area_code:content.area_code
+                    },
+                    success:function(data){
+                        if(data=='success'){
+                            Toast.success('修改收货地址成功');
+                            _this.$router.go(-1);
+                        }
+                    }
+                });
             },
             //点击删除
-            onDelete() {
-            console.log('delete');
+            async onDelete() {
+                const _this =this;
+                if(this.addressInfo.is_default==1){
+                    //update xxx set name='xxx' where title='xxx';
+                }
+               await $.ajax({
+                    url:"http://localhost:2014/address/delete",
+                    type:"POST",
+                    data:{
+                        addressId:_this.$router.history.current.query.addressId
+                    },
+                    success:function(data){
+                        if(data=='success'){
+                            Toast.success('删除收货地址成功');
+                            _this.$router.go(-1);
+                        }
+                    }
+                });
             }
         }
     }

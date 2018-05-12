@@ -3,79 +3,84 @@
         <xheader />
         <div class="allkind">
 	        <ul class="kind">
-	        	<li v-for="i in arr" v-text="i.name" :class="i.id==xid?'li_c':' '"  @click="changeXid(i.id)"></li>
+	        	<li v-for="i in arr" v-text="i.name" :class="i.kindId==xid?'li_c':' '"  @click="changeXid(i.kindId)"></li>
 	        </ul>
 	        <div class="kind_l"></div>
 	        <div class="kind_r">
 	        	<ul>
-	        		<li>
-	        			<a href="#/goodsinfo"><img :src="xsrc"/></a>
-	        			<p>白酒</p>
-	        		</li>
-	        		<li>
-	        			<a href="#/goodsinfo"><img :src="xsrc"/></a>
-	        			<p>白酒</p>
-	        		</li>
-	        		<li>
-	        			<a href="#/goodsinfo"><img :src="xsrc"/></a>
-	        			<p>白酒</p>
-	        		</li>
-	        		<li>
-	        			<a href="#/goodsinfo"><img :src="xsrc"/></a>
-	        			<p>白酒</p>
-	        		</li>
-	        		<li>
-	        			<a href="#/goodsinfo"><img :src="xsrc"/></a>
-	        			<p>白酒啊打发啊实打实大所多</p>
+	        		<li v-for="i in childArr">
+	        			<a  @click="clickGoodslist(i.kindId)"><p v-text="i.name"></p></a>
+	        			
 	        		</li>
 	        	</ul>
 	        </div>
 		</div>
     </div>
-  
 </template>
 
 <script>
     import xheader from "../common/header.vue";
-    import src from "../../img/user.jpg";
+	import src from "../../img/user.jpg";
+	import $ from "jquery";
     export default{
         components:{
             xheader
         },
         data(){
         	return {
-        		xkind:"干果零食",
+				xkind:"干果零食",
+				//选择总类的id
         		xid:0,
-        		xsrc:src,
-        		arr:[{
-					id:0,
-					name:"干果零食",
-				},{
-					id:1,
-					name:"绿色水果",
-				},{
-					id:2,
-					name:"有机蔬菜",
-				},{
-					id:3,
-					name:"优质家禽",
-				},{
-					id:4,
-					name:"柴米油盐",
-				},{
-					id:5,
-					name:"手工制品",
-				},{
-					id:6,
-					name:"当地特产",
-				}]
+				xsrc:src,
+				//总类数组
+				arr:[],
+				childArr:[]
         	}
-       },
+	   },
+	   async mounted(){
+		   const _this= this;
+		   await $.ajax({
+                url:"http://localhost:2014/findAll/goods_kind",
+                type:"GET",
+                data:{
+                },
+                success:function(data){
+                    _this.arr=data;
+                    _this.xid=data[0].kindId;
+                }
+            });
+            await $.ajax({
+                url:"http://localhost:2014/findChild/goods_kind",
+                type:"GET",
+                data:{
+                    kindId:_this.xid
+                },
+                success:function(data){ 
+                        _this.childArr=data;
+                    
+                }
+            })
+	   },
        methods:{
        	//改变选中的商品类型xid
-       		changeXid(id){
-       			this.xid=id;
-       		}
+       		async changeXid(id){
+				const _this= this;
+				this.xid=id;
+				await $.ajax({
+					url:"http://localhost:2014/findChild/goods_kind",
+					type:"GET",
+					data:{
+						kindId:_this.xid
+					},
+					success:function(data){ 
+							_this.childArr=data;
+						
+					}
+            	})
+			},
+			clickGoodslist(id){
+				this.$router.push({path:'/goodslist',query:{type:'kindId',value:id}});
+			}   
        }
     }
 </script>

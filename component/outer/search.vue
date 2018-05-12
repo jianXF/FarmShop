@@ -1,17 +1,17 @@
 <template>
     <div class="search">
         <header>
-        	<a href="#/totaltab/index" class="iconfont icon-back"></a>
+        	<a @click="goBack" class="iconfont icon-back"></a>
         	<p>
-        		<input type="text" v-model="inputValue"/>
+        		<input type="text" v-model="inputValue" @input="findGoods"/>
         		<i class="iconfont icon-close" @click="clearInput"></i>
         	</p>
-        	<p>搜 索</p>
+        	<p @click="goodslist">搜 索</p>
         </header>
         <ul>
-        	<li>
-        		<p>按时打卡机啊拉科技三大</p>
-        		<i class="iconfont icon-skip"></i>
+        	<li v-for="i in titleArr">
+        		<p v-text="i.title" @click="goodsInfo(i.goodsId)"></p>
+        		<i class="iconfont icon-skip" @click="changeInput(i.title)"></i>
         	</li>
         </ul>
     </div>
@@ -19,20 +19,64 @@
 </template>
 
 <script>
-    //import xheader from "../common/xheader.vue"
+	//import xheader from "../common/xheader.vue"
+	import $ from "jquery";
     export default{
         components:{
             //xfooter
         },
         data(){
         	return {
-        		inputValue:""
+				inputValue:"",
+				titleArr:[]
         	}
         },
         methods:{
         	clearInput(){
         		this.inputValue="";
-        	}
+			},
+			async findGoods(){
+				const _this =this;
+				await $.ajax({
+                url:"http://localhost:2014/find/goods/title",
+                type:"GET",
+                data:{
+					xtab:'1',
+					title:_this.inputValue
+                },
+                success:function(data){
+                    var newdata = [];
+                    if(data.length>8){
+                        newdata.push(data[0]);
+                        newdata.push(data[1]);
+						newdata.push(data[2]);
+						newdata.push(data[3]);
+                        newdata.push(data[4]);
+						newdata.push(data[5]);
+						newdata.push(data[6]);
+                        newdata.push(data[7]);
+                    }else{
+                        newdata = data;
+                    }
+					_this.titleArr = newdata;
+                }
+            });
+			},
+			changeInput(title){
+				this.inputValue=title;
+			},
+			//跳转详情
+			goodsInfo(goodsId){
+				this.$router.push({path:'/goodsinfo?',query:{goodsId:goodsId}});
+			},
+			//跳转列表
+			goodslist(){
+				this.$router.push({path:'/goodslist',query: {type:'title',value:this.inputValue}});
+			},
+			//返回上一页
+			goBack(){
+				this.$router.go(-1);
+			}
         }
     }
 </script>

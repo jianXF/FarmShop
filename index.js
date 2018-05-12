@@ -28,6 +28,7 @@ import addresslist from "./component/outer/addresslist.vue";
 import addressinfo from "./component/outer/addressinfo.vue";
 import updateressinfo from "./component/outer/updateressinfo.vue";
 import search from "./component/outer/search.vue";
+import order from "./component/outer/order.vue";
 
 //totaltab的子模块
 import shouye from "./component/totaltab/shouye.vue";
@@ -104,6 +105,9 @@ var router = new VueRouter({
         path:"/search",//搜索页面
         component:search
     },{
+        path:"/order",//确认订单
+        component:order
+    },{
         path:"/",
         redirect:"/totaltab/index"
     },]
@@ -114,8 +118,8 @@ var store = new Vuex.Store({
     state:{
         //设置订单页面是哪五种情况
         selectOrder:1,
-        //从收货地址页面跳转到详情
-        selectAddress:null
+        //从收货地址页面返回到订单
+        selectAddress:0
     	//判断totaltab切换
         //tabId:0
     }

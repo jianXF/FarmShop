@@ -1,15 +1,17 @@
 <template>
 	<ul class="goodlist">
-		<li v-for="i in goods">
-			<a href="#/goodsinfo"><img :src="i.src"/></a>
-			<p v-text="i.name"></p>
+		<li v-for="i in goodsArr">
+			<a  @click="goodsinfo(i.goodsId)"><img :src="i.imgLogo.split(';')[0]"/></a>
+			<p v-text="i.title"></p>
 			<p>
-				<span class="bao" v-if="i.bool==0">包邮</span>
-				<span class="place" v-text="i.place"></span>
+				<span class="bao" v-if="i.delivery=='0.00'">包邮</span>
+				<span class='delivery' v-if="i.delivery!='0.00'">快递{{i.delivery}}</span>
+				<span class="place" v-text="i.address"></span>
 			</p>
 			<p>
-				<span >￥{{i.price}}</span>
-				<span>{{i.price}}人付款</span>
+				<span v-text="i.isBargain==0?'￥'+i.price_o:'￥'+i.price_n"></span>
+				<span v-text="i.isBargain==0?'':'￥'+i.price_o"></span>
+				<span v-if="i.isBargain==0">{{i.sellnum}}人付款</span>
 			</p>
 			
 		</li>
@@ -19,51 +21,14 @@
 <script scoped>
 	import src from "../../img/user.jpg";
 	export default{
+		props:["goodsArr"],
 		data(){
 			return {
-				goods:[{
-					id:0,
-					name:"手机宽捡垃圾发了基拉对方带里撒地方",
-					src:src,
-					price:"2",
-					bool:1,
-					place:"重庆"
-				},{
-					id:1,
-					name:"手机宽捡垃圾发了基拉对方带",
-					src:src,
-					price:"232",
-					bool:0,
-					place:"云岚"
-				},{
-					id:2,
-					name:"手机宽捡垃圾发了基拉对方带",
-					src:src,
-					price:"2234",
-					bool:0,
-					place:"上海"
-				},{
-					id:2,
-					name:"手机宽捡垃圾发了基拉对方带",
-					src:src,
-					price:"2234",
-					bool:0,
-					place:"上海"
-				},{
-					id:2,
-					name:"手机宽捡垃圾发了基拉对方带",
-					src:src,
-					price:"2234",
-					bool:0,
-					place:"上海"
-				},{
-					id:2,
-					name:"手机宽捡垃圾发了基拉对方带",
-					src:src,
-					price:"2234",
-					bool:0,
-					place:"上海"
-				}]
+			}
+		},
+		methods:{
+			goodsinfo(id){
+				this.$router.push({path:'/goodsinfo',query:{goodsId:id}});
 			}
 		}
 	}
@@ -86,6 +51,7 @@
 }
 .goodlist>li img{
 	width: 100%;
+	height: 12rem;
 }
 .goodlist>li>p:nth-of-type(1){
 	width: 100%;
@@ -114,13 +80,24 @@
 	line-height: 2.2rem;
 }
 .goodlist>li>p:nth-of-type(3)>span:nth-of-type(1){
-	font-size: 1.8rem;
+	font-size: 1.6rem;
 	color:#EE4F4F;
 	
 }
 .goodlist>li>p:nth-of-type(3)>span:nth-of-type(2){
 	font-size: 1rem;
 	color:#A0A0A0;
+	text-decoration: line-through;
+	padding-left: 2px;
+}
+.goodlist>li>p:nth-of-type(3)>span:nth-of-type(3){
+	font-size: 1rem;
+	color:#A0A0A0;
+	float: right;
 	padding-left: 6px;
+}
+
+.delivery{
+	color:#A0A0A0;
 }
 </style>

@@ -1,13 +1,18 @@
 	<!--首页商品分类-->
 <template>
 		<section class="sumkind">
-				<a href="#/goodsinfo" v-for="i in arr">
+				<a  @click="clickGoodslistB(bran.isBargain)" >
+					<img :src="bran.src" />
+				<span v-text="bran.name"></span>
+				</a>
+				<a @click="clickGoodslistO(i.kindId)" v-for="i in arr">
 					<img :src="i.src" />
 				<span v-text="i.name"></span>
 				</a>
 		</section>
 </template>
 <script>
+import $ from "jquery";
 import src1 from "../../img/list5.png";
 import src2 from "../../img/list4.png";
 import src3 from "../../img/list1.png";
@@ -19,39 +24,38 @@ import src8 from "../../img/list8.png";
 	export default{
 		data(){
 			return {
-				arr:[{
-					id:0,
-					name:"特价促销",
-					src:src1
-				},{
-					id:1,
-					name:"干果零食",
-					src:src2
-				},{
-					id:2,
-					name:"绿色水果",
-					src:src3
-				},{
-					id:3,
-					name:"有机蔬菜",
-					src:src4
-				},{
-					id:4,
-					name:"优质家禽",
-					src:src5
-				},{
-					id:5,
-					name:"柴米油盐",
-					src:src6
-				},{
-					id:6,
-					name:"手工制品",
-					src:src7
-				},{
-					id:7,
-					name:"当地特产",
-					src:src8
-				}]
+				srcArr:[src2,src3,src4,src5,src6,src7,src8],
+				arr:[],
+				//特价促销
+				bran:{
+					isBargain:1,
+					src:src1,
+					name:'特价促销'
+				}
+			}
+		},
+		async mounted(){
+			const _this =this;
+			await $.ajax({
+                url:"http://localhost:2014/findAll/goods_kind",
+                type:"GET",
+                data:{
+                },
+                success:function(data){
+                    for(var i=0;i<data.length;i++){
+						data[i].src=_this.srcArr[i];
+					}
+					_this.arr = data;
+
+                }
+            });
+		},
+		methods:{
+			clickGoodslistB(){
+				this.$router.push({path:'/goodslist',query:{type:'isBargain',value:1}});
+			},
+			clickGoodslistO(id){
+				this.$router.push({path:'/goodslist',query:{type:'oId',value:id}});
 			}
 		}
 	}

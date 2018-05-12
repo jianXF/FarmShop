@@ -11,7 +11,7 @@
 			<a href="#/collet"><i class="iconfont icon-favorites"></i><p>我的收藏</p></a>
 		</div>
         <header>
-        	<i class="iconfont icon-back"></i>
+        	<i class="iconfont icon-back" @click="goBack"></i>
         	<p :class="xtab==1?'p_c':''" @click="changeXtab(1)">宝贝</p>
         	<p :class="xtab==2?'p_c':''" @click="changeXtab(2)">商品参数</p>
         	<p :class="xtab==3?'p_c':''" @click="changeXtab(3)">评价</p>
@@ -21,31 +21,30 @@
         <div class="list1" :style="{display:xtab=='1'?'block':'none'}">
 				<xbanner />
 				<div class="detil">
+					<p v-text="goodsDate.title"></p>
+					<h4 v-if="goodsDate.isBargain==1"><span v-text="goodsDate.price_n">34.45</span><i v-text="'原价 :'+goodsDate.price_n"> </i></h4>
+					<h4 v-if="goodsDate.isBargain==0"><span v-text="goodsDate.price_o">34.45</span></h4>
 					<p>
-						asdasd啊空结束跨境圣诞快乐拉跨境电商来看卡好的来看
-					</p>
-					<h4><span>34.45</span><i>原价 : 53.23</i></h4>
-					<p>
-						<span>快递 : <i>23.23</i></span>
-						<span>月销<i>2342</i>笔</span>
-						<span>四川成都</span>
+						<span>快递 : <i v-text="goodsDate.delivery"></i></span>
+						<span>月销<i v-text="goodsDate.sellnum"></i>笔</span>
+						<span v-text="goodsDate.address"></span>
 					</p>
 				</div>
 				<p>——————详情——————</p>
 				<div class="imgs">
-					<img :src="src" />
-					<img :src="src" />
+					<img v-for="i in goodsDate.imgs" :src="i">
 				</div>
         </div>
         <!--商品参数-->
         <div class="list2" :style="{display:xtab=='2'?'block':'none'}">
         	<ul>
-        		<li><span>商品名称：</span><p>千年金山红红按聚划算的卡号是的adfdaf号开始地方</p></li>
-        		<li><span>商品编号：</span><p>ETY2342342</p></li>
-        		<li><span>商品品牌：</span><p>金三红</p></li>
-        		<li><span>上架时间：</span><p>2047-04-31</p></li>
-        		<li><span>商品重量</span><p>12.333千克</p></li>
-        		<li><span>商品库存</span><p>4532</p></li>
+        		<li><span>商品名称：</span><p v-text="goodsDate.title"></p></li>
+        		<li><span>商品编号：</span><p v-text="goodsDate.goodsId">ETY2342342</p></li>
+        		<li><span>商品品牌：</span><p v-text="goodsDate.sellerTitle">金三红</p></li>
+				<li><span>商品类型: </span><p v-text="goodsDate.name"></p></li>
+        		<li><span>上架时间：</span><p v-text="goodsDate.upTime">2047-04-31</p></li>
+        		<li><span>商品重量</span><p v-text="goodsDate.heavy+'千克'"></p></li>
+        		<li><span>商品库存</span><p v-text="goodsDate.stock">4532</p></li>
         	</ul>
         </div>
         <!--评价-->
@@ -81,14 +80,15 @@
         		<span>收藏</span>
         	</a>
         	<h4 @click="showAdd">加入购物车</h4>
-        	<h4>立即购买</h4>
+        	<h4 @click="showBuy">立即购买</h4>
         </footer>
         <div class="addcar" :style="{display:carbool==true?'block':'none'}">
         	<nav>
-        		<p><img :src="src" /></p>
+        		<p><img :src="goodsDate.logo" /></p>
         		<h4>
-        			<span>￥2399.45</span>
-        			<i>库存 343件</i>
+        			<span v-if="goodsDate.isBargain==0" v-text="'￥'+goodsDate.price_o"></span>
+					<span v-if="goodsDate.isBargain==1" v-text="'￥'+goodsDate.price_n"></span>
+        			<i v-text="'库存'+goodsDate.stock+'件'"></i>
         		</h4>
         		<i class="iconfont icon-close" @click="cancalAdd"></i>
         	</nav>
@@ -105,8 +105,11 @@
 </template>
 
 <script>
+	import $ from "jquery";
 	import src from "../../img/user.jpg";
-    import xbanner from "../common/banner1.vue"
+	import xbanner from "../common/banner1.vue";
+	import Vant from 'vant';
+	import { Dialog,Toast } from 'vant';
     export default{
         components:{
             xbanner
@@ -119,10 +122,30 @@
         		assess:[435,35,865,234],//评价数量
         		xass:1,  //评价中的评论等级选择
         		colletbool:false,     //是否收藏
-        		xnum:1,	//加入购物车的数量
-        		carbool:false	//加入购物车选择的弹出框
-        	}
-        },
+				xnum:1,	//加入购物车的数量
+				type:1, //是1-加入购车还是2-立即购买
+				carbool:false,	//加入购物车/立即购买选择的弹出框
+				goodsDate:{}
+ 			}
+		},
+		async mounted(){
+			const _this= this;
+			var goodsId = this.$router.history.current.query.goodsId;
+			await $.ajax({
+				url:"http://localhost:2014/find/goods/goodsId",
+				type:"GET",
+				data:{
+					goodsId:goodsId
+				},
+				success:function(data){
+					_this.goodsDate=data;
+					_this.goodsDate.imgLogo = _this.goodsDate.imgLogo.split(';');
+					_this.goodsDate.imgs = _this.goodsDate.imgs.split(';');
+					_this.goodsDate.upTime = _this.goodsDate.upTime.substr(0,8);
+					_this.goodsDate.logo = _this.goodsDate.imgLogo[0]
+				}
+			});
+		},
         methods:{
         	//选择选项卡，显示不用信息
         	changeXtab(id){
@@ -151,7 +174,12 @@
         	},
         	//点击添加数量按钮
 	        addNum(){
-	        	this.xnum++;
+				if(this.xnum>this.goodsDate.stock){
+					Toast.fail('库存不足，不能添加');
+				}else{
+					this.xnum++;
+				}
+	        	
 	        },
 	         //点击减少数量事件按钮
 	        subNum(){
@@ -163,14 +191,98 @@
 	       },
 	       //点击加入购物车，弹出选择数量框及蒙版
 	       showAdd(){
-	       	this.carbool=true;
-	       },
+			if(sessionStorage.getItem('userId')){
+					this.carbool=true;
+					this.type=1;
+			}else{
+				Dialog.confirm({
+				title: '是否登陆',
+				message: '只有登陆才能操作此功能'
+				}).then(() => {
+					this.$router.push({path:'/login'});
+				}).catch(() => {
+				});
+			}
+	       	
+		   },
+		   //点击立即购买
+		   showBuy(){
+			   if(sessionStorage.getItem('userId')){
+					this.carbool=true;
+					this.type=2;
+			}else{
+				Dialog.confirm({
+				title: '是否登陆',
+				message: '只有登陆才能操作此功能'
+				}).then(() => {
+					this.$router.push({path:'/login'});
+				}).catch(() => {
+				});
+			}
+		   },
+		   goBack(){
+			   this.$router.go(-1);
+		   },
 	       //取消添加购物车（点击叉叉）
 	       cancalAdd(){
 	       	this.carbool=false;
 	       },
 	       //点击确定添加到购物车，并选择框消失
-	       addCart(){
+	       async addCart(){
+			   const _this = this;
+			   const isrepeat = {bool:true,data:{}};
+			   if(this.type==1){
+				   await $.ajax({
+						url:"http://localhost:2014/repeatCart",
+						type:"get",
+						data:{
+							userId:sessionStorage.getItem('userId'),
+							goodsId:_this.goodsDate.goodsId
+						},
+						success:function(data){
+							if(data.length==0){
+								isrepeat.bool=false;
+							}else{
+								isrepeat.bool=true;
+								isrepeat.data = data[0];
+							}
+						}
+					});
+					if(isrepeat.bool==false){
+						await $.ajax({
+							url:"http://localhost:2014/addcart",
+							type:"POST",
+							data:{
+								userId:sessionStorage.getItem('userId'),
+								goodsId:_this.goodsDate.goodsId,
+								buyNum:_this.xnum
+							},
+							success:function(data){
+								if(data='success'){
+									Toast.success('商品已添加购物车');
+								}
+							}
+						});
+					}else{
+						await $.ajax({
+							url:"http://localhost:2014/updateCart",
+							type:"POST",
+							data:{
+								type:1,
+								carId:isrepeat.data.carId,
+								buyNum:_this.xnum
+							},
+							success:function(data){
+								if(data='success'){
+									Toast.success('商品已添加购物车');
+								}
+							}
+						});
+					}
+				   
+			   }else{
+				
+			   }
 	       	this.carbool=false;
 	       }
         }

@@ -3,15 +3,15 @@
 	<div class="promotion">
 		<nav>
 			<p>特价促销</p>
-			<a href="#/goodslist">MORE<i class="iconfont icon-more"></i></a>
+			<a @click="clickGoodslist">MORE<i class="iconfont icon-more"></i></a>
 		</nav>
 		<ul>
-			<a v-for="i in goods" href="#/goodsinfo">
-				<img :src="i.src"  />
-				<h3 v-text="i.name"></h3>
+			<a v-for="i in bargainArr" @click="goodsinfo(i.goodsId)">
+				<img :src="i.imgLogo.split(';')[0]"  />
+				<h3 v-text="i.title"></h3>
 				<p>
-					<span >￥{{i.price}}</span>
-					<i>￥{{i.price}}</i>
+					<span >￥{{i.price_n}}</span>
+					<i>￥{{i.price_o}}</i>
 				</p>
 			</a>
 		</ul>
@@ -21,6 +21,7 @@
 <script>
 		import src from "../../img/user.jpg";
 	export default{
+		props:["bargainArr"],
 		data(){
 			return {
 				goods:[{
@@ -39,6 +40,15 @@
 					src:src,
 					price:"22.2"
 				}]
+			}
+		},
+		methods:{
+			goodsinfo(id){
+				this.$router.push({path:'/goodsinfo',query:{goodsId:id}});
+			},
+			clickGoodslist(){
+				
+				this.$router.push({path:'/goodslist',query:{type:'isBargain',value:1}});
 			}
 		}
 	}
@@ -105,5 +115,8 @@
 	line-height: 1.5rem;
 	color: #A0A0A0;
 	
+}
+.promotion>ul>a img{
+	height: 7rem;;
 }
 </style>

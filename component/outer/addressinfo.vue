@@ -2,7 +2,7 @@
     <div>
         <div class="header_top">
             <van-nav-bar
-                    title="编辑收货地址"
+                    title="新增收货地址"
                     left-arrow
                     @click-left="onClickLeft"
             />
@@ -10,8 +10,7 @@
         <van-address-edit
             style="marginTop:46px"
             :area-list="areaList"
-            show-delete
-            show-set-default
+
             show-search-result
             @save="onSave"
             @delete="onDelete"
@@ -21,41 +20,67 @@
 </template>
 
 <script>
-    //import xheader from "../common/xheader.vue"
+import $ from "jquery";
+import areDate from "../address.json";
+	import Vant from 'vant';
+	import { Toast  } from 'vant';
     export default{
         components:{
             //xfooter
         },
         data() {
             return {
-            areaList:{
-                province_list: {
-                    110000: '重庆市'
-                },
-                city_list: {
-                    110100: '重庆市',
-                    110200: '区县',
-                },
-                county_list: {
-                    110101: '九龙坡区',
-                    110102: '沙坪坝区',
-                    110105: '大渡口区',
-                    110106: '南岸区',
-                    110201: '忠县',
-                    110202: '万州县',
-
-                }
+            areaList:{}
             }
-            }
+        },
+        mounted(){
+            const _this = this;
+            this.areaList = areDate;
         },
 
         methods: {
             //标题点击事件
             onClickLeft(){
-                this.$router.push({path:'/addresslist'});
+                this.$router.go(-1);
             },
             //保存地址
-            onSave(content) {
+            async onSave(content) {
+                const _this =this;
+                var isFirst = false;
+                console.log(content);
+                await $.ajax({
+                    url:"http://localhost:2014/addressAll",
+                    type:"POST",
+                    data:{
+                        userId:sessionStorage.getItem('userId')
+                    },
+                    success:function(data){
+                        if(data.length==0){
+                            isFirst = true;
+                        }
+                    }
+                });
+                await $.ajax({
+                    url:"http://localhost:2014/address/insert",
+                    type:"POST",
+                    data:{
+                        userId:sessionStorage.getItem('userId'),
+                        name:content.name,
+                        tel:content.tel,
+                        province:content.province,
+                        city:content.city,
+                        county:content.county,
+                        address_detail:content.address_detail,
+                        area_code:content.area_code,
+                        is_default:isFirst?'1':'0'
+                    },
+                    success:function(data){
+                        if(data=='success'){
+                            Toast.success('添加收货地址成功');
+                            _this.$router.go(-1);
+                        }
+                    }
+                });
             console.log(content);
             },
             //点击删除

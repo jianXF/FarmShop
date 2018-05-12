@@ -1,7 +1,7 @@
 *{
     margin: 0;
     padding: 0;
-    font-size:1rem;
+    
     color:#52545E;
 }
 
@@ -84,4 +84,14 @@ i,em{
 .van-dialog .van-button__text{
 	color:#52545E;
 	font-size: 1.4rem;
+}
+
+.van-submit-bar__price span{
+	font-size: 1.5rem;
+}
+.order .van-button .van-button__text{
+	font-size: 1.6rem;
+}
+.van-address-edit .van-button .van-button__text{
+	color: #000;
 }
