@@ -50,7 +50,7 @@ import areDate from "../address.json";
                 console.log(content);
                 await $.ajax({
                     url:"http://localhost:2014/addressAll",
-                    type:"POST",
+                    type:"GET",
                     data:{
                         userId:sessionStorage.getItem('userId')
                     },

@@ -1,8 +1,8 @@
 <template>
   <swiper :options="swiperOption" ref="mySwiper" >
-<swiper-slide><img :src="imgsrc[0]" class="swipersrc"/></swiper-slide>
-<swiper-slide><img :src="imgsrc[1]" class="swipersrc"/></swiper-slide>
-<swiper-slide><img :src="imgsrc[0]" class="swipersrc"/></swiper-slide>
+<swiper-slide v-for="i in bannberImg"><img :src="i" class="swipersrc"/></swiper-slide>
+<!-- <swiper-slide><img :src="imgsrc[1]" class="swipersrc"/></swiper-slide>
+<swiper-slide><img :src="imgsrc[0]" class="swipersrc"/></swiper-slide> -->
 <div class="swiper-pagination" slot="pagination"></div>
  </swiper>
   
@@ -16,13 +16,14 @@
 	import { swiper, swiperSlide } from 'vue-awesome-swiper';
 	import '../../img/swiper-4.1.0.min.css';
 	 export default{
+		 props:["bannberImg"],
 	 	components:{
 	 		swiper,
 	 		swiperSlide
 	 	},
     data(){
       return {
-      	imgsrc:[src1,src2],
+      	imgsrc:[],
 		swiperOption: { //以下配置不懂的，可以去swiper官网看api，链接http://www.swiper.com.cn/api/
 		        notNextTick: true, 
 //		        autoplay: {
@@ -49,7 +50,10 @@
 		        debugger: true
 		     }
     }
-  }
+	},
+	mounted(){
+	
+	}
 }
 </script>
 <style  scoped>

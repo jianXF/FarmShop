@@ -51,7 +51,7 @@ i,em{
 	margin-top: 0px;
 }
 .selllist .van-card__row{
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
 }
 .selllist .van-card__title{
     font-size: 1.5rem;
@@ -94,4 +94,12 @@ i,em{
 }
 .van-address-edit .van-button .van-button__text{
 	color: #000;
+}
+
+.van-card__footer .van-button__text{
+	color:#000;
+}
+
+.selllist .van-button--mini{
+	width:70px;
 }

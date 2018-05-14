@@ -5,9 +5,9 @@
 			<a href="#/sellerlist">MORE<i class="iconfont icon-more"></i></a>
 		</nav>
 		<ul>
-			<a v-for="i in seller" href="#/sellerinfo">
-				<img :src="i.src"  />
-				<p v-text="i.name"></p>
+			<a v-for="i in seller"  @click="clickSellerinfo(i)">
+				<img :src="i.img"  />
+				<p v-text="i.sellerTitle"></p>
 			</a>
 		</ul>
 	</div>
@@ -15,34 +15,29 @@
 
 <script>
 	import src from "../../img/user.jpg";
+	import $ from "jquery";
 	export default{
 		data(){
 			return {
-				seller:[{
-					id:0,
-					name:"手机宽带",
-					src:src
-				},{
-					id:0,
-					name:"手机宽带",
-					src:src
-				},{
-					id:0,
-					name:"手机宽带",
-					src:src
-				},{
-					id:0,
-					name:"手机宽带",
-					src:src
-				},{
-					id:0,
-					name:"手机宽带",
-					src:src
-				},{
-					id:0,
-					name:"手机宽带",
-					src:src
-				}]
+				seller:[]
+			}
+		},
+		async mounted(){
+			const _this= this;
+            await $.ajax({
+				url:"http://localhost:2014/sellerAll",
+				type:"GET",
+				data:{
+					limit:6
+				},
+				success:function(data){
+					_this.seller = data;
+				}
+            });
+		},
+		methods:{
+			clickSellerinfo(i){
+				this.$router.push({path:'/sellerinfo',query:{sellerId:i.sellerId}});
 			}
 		}
 	}

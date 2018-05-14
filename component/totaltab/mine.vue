@@ -12,7 +12,7 @@
 				<a v-for="i in arr" @click="changeSelectOrder(i.id)">
 					<i :class="i.icon"></i>
 					<span v-text="i.name"></span>
-					<em>0</em>
+					<em v-text="i.count"></em>
 				</a>
 			</section>
 		</div>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+	import	$ from "jquery";
 	import xheader from "../common/header1.vue";
 	import Vant from 'vant';
 	import { Toast  } from 'vant';
@@ -45,22 +46,26 @@
         			id:1,
         			name:"待付款",
         			icon:"iconfont icon-box",
-        			bool:false
+					bool:false,
+					count:0
         		},{
         			id:2,
         			name:"待发货",
         			icon:"iconfont icon-productfeatures",
-        			bool:false
+					bool:false,
+					count:0
         		},{
         			id:3,
         			name:"待收货",
         			icon:"iconfont icon-similarproduct",
-        			bool:false
+					bool:false,
+					count:0
         		},{
         			id:4,
         			name:"待评价",
         			icon:"iconfont icon-edit",
-        			bool:false
+					bool:false,
+					count:0
         		}]
         	}
 		},
@@ -75,9 +80,24 @@
 				 this.$router.push({path:'/totaltab/index'});
 			 }
 		},
-		mounted(){
+		async mounted(){
 			this.mine.logo = sessionStorage.getItem('logo');
 			this.mine.tel = sessionStorage.getItem('tel');
+			for(var i of this.arr){
+				await $.ajax({
+					url:"http://localhost:2014/order/colum",
+					type:"GET",
+					data:{
+						status:i.id
+					},
+					success:function(data){
+						i.count=data['count(*)'];
+						
+						
+					}
+				});
+			}
+			
 		}
     }
 </script>

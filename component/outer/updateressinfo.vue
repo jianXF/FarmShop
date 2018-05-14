@@ -84,6 +84,19 @@
                 const _this =this;
                 if(this.addressInfo.is_default==1){
                     //update xxx set name='xxx' where title='xxx';
+                    await $.ajax({
+                    url:"http://localhost:2014/address/updatedefault",
+                    type:"POST",
+                    data:{
+                        userId:sessionStorage.getItem('userId'),
+                        addressId:_this.$router.history.current.query.addressId
+                    },
+                    success:function(data){
+                        if(data=='success'){
+                           console.log("四大皆空");
+                        }
+                    }
+                });
                 }
                await $.ajax({
                     url:"http://localhost:2014/address/delete",

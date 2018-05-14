@@ -5,10 +5,7 @@
     	<!--加入购物车的背景覆盖-->
     	<div class="back1" :style="{display:carbool==true?'block':'none'}" @click="cancalAdd"></div>
 		<div class="tips" :style="{display: tipsbool==true?'block':'none'}">
-			<a href="#/totaltab/index"><i class="iconfont icon-store"></i><p>首页</p></a>
-			<a href="#/totaltab/classify"><i class="iconfont icon-cart"></i><p>分类</p></a>
-			<a href="#/letterword"><i class="iconfont icon-comments"></i><p>我的反馈</p></a>
-			<a href="#/collet"><i class="iconfont icon-favorites"></i><p>我的收藏</p></a>
+			<xfourlist />
 		</div>
         <header>
         	<i class="iconfont icon-back" @click="goBack"></i>
@@ -19,7 +16,7 @@
         </header>
         <!--宝贝详情-->
         <div class="list1" :style="{display:xtab=='1'?'block':'none'}">
-				<xbanner />
+				<xbanner :bannberImg="goodsDate.imgLogo"/>
 				<div class="detil">
 					<p v-text="goodsDate.title"></p>
 					<h4 v-if="goodsDate.isBargain==1"><span v-text="goodsDate.price_n">34.45</span><i v-text="'原价 :'+goodsDate.price_n"> </i></h4>
@@ -39,12 +36,12 @@
         <div class="list2" :style="{display:xtab=='2'?'block':'none'}">
         	<ul>
         		<li><span>商品名称：</span><p v-text="goodsDate.title"></p></li>
-        		<li><span>商品编号：</span><p v-text="goodsDate.goodsId">ETY2342342</p></li>
-        		<li><span>商品品牌：</span><p v-text="goodsDate.sellerTitle">金三红</p></li>
+        		<li><span>商品编号：</span><p v-text="goodsDate.goodsId"></p></li>
+        		<li><span>商品品牌：</span><p v-text="goodsDate.sellerTitle"></p></li>
 				<li><span>商品类型: </span><p v-text="goodsDate.name"></p></li>
-        		<li><span>上架时间：</span><p v-text="goodsDate.upTime">2047-04-31</p></li>
+        		<li><span>上架时间：</span><p v-text="goodsDate.upTime"></p></li>
         		<li><span>商品重量</span><p v-text="goodsDate.heavy+'千克'"></p></li>
-        		<li><span>商品库存</span><p v-text="goodsDate.stock">4532</p></li>
+        		<li><span>商品库存</span><p v-text="goodsDate.stock"></p></li>
         	</ul>
         </div>
         <!--评价-->
@@ -75,9 +72,9 @@
         		<i class="iconfont icon-store"></i>
         		<span>店铺</span>
         	</a>
-        	<a @click="colletGoods">
+        	<a @click="colletGoods(goodsDate)">
         		<i :class="colletbool==true?'iconfont icon-favorite i_c':'iconfont icon-favorite'"></i>
-        		<span>收藏</span>
+        		<span :style="{color:colletbool==true?'#EE4F4F':'#52545E'}">收藏</span>
         	</a>
         	<h4 @click="showAdd">加入购物车</h4>
         	<h4 @click="showBuy">立即购买</h4>
@@ -108,11 +105,13 @@
 	import $ from "jquery";
 	import src from "../../img/user.jpg";
 	import xbanner from "../common/banner1.vue";
+	import xfourlist from "../common/fourlist.vue";
 	import Vant from 'vant';
 	import { Dialog,Toast } from 'vant';
     export default{
         components:{
-            xbanner
+			xbanner,
+			xfourlist
         },
         data(){
         	return {
@@ -138,13 +137,35 @@
 					goodsId:goodsId
 				},
 				success:function(data){
+					
 					_this.goodsDate=data;
 					_this.goodsDate.imgLogo = _this.goodsDate.imgLogo.split(';');
 					_this.goodsDate.imgs = _this.goodsDate.imgs.split(';');
 					_this.goodsDate.upTime = _this.goodsDate.upTime.substr(0,8);
-					_this.goodsDate.logo = _this.goodsDate.imgLogo[0]
+					_this.goodsDate.logo = _this.goodsDate.imgLogo[0];
+					if(_this.goodsDate.isSell==0){
+                        Dialog.alert({
+                            message: '该商品已下架，无法查看'
+                        }).then(() => {
+                            _this.$router.go(-1);
+                        });
+                    }
 				}
 			});
+			await $.ajax({
+                url:"http://localhost:2014/collet/find",
+                type:"GET",
+                data:{
+                    userId:sessionStorage.getItem("userId"),
+                    colletType:2,
+                    colletId:goodsId
+                },
+                success:function(data){
+                    if(data=="success"){
+                        _this.colletbool = true;
+                    }
+                }
+            });
 		},
         methods:{
         	//选择选项卡，显示不用信息
@@ -164,12 +185,41 @@
         		this.xass=id;
         	},
         	//将该商品收藏或取消收藏
-        	colletGoods(){
+        	async colletGoods(goods){
+				const _this= this;
         		//商品未收藏
         		if(this.colletbool==false){
-        			this.colletbool=true;
+					 await $.ajax({
+                        url:"http://localhost:2014/collet/insert",
+                        type:"post",
+                        data:{
+                            userId:sessionStorage.getItem("userId"),
+                            colletType:2,
+                            colletId:goods.goodsId
+                        },
+                        success:function(data){
+                            if(data=="success"){
+                                _this.colletbool=true;
+                                Toast.success('收藏成功');
+                            }
+                        }
+                    });
         		}else{
-        			this.colletbool=false;
+					await $.ajax({
+                        url:"http://localhost:2014/collet/delete",
+                        type:"post",
+                        data:{
+                            userId:sessionStorage.getItem("userId"),
+                            colletType:2,
+                            colletId:goods.goodsId
+                        },
+                        success:function(data){
+                            if(data=="success"){
+                                _this.colletbool=false;
+                                Toast.success('取消收藏');
+                            }
+                        }
+                    });
         		}
         	},
         	//点击添加数量按钮
@@ -281,7 +331,7 @@
 					}
 				   
 			   }else{
-				
+				   _this.$router.push({path:'/order',query:{goodsId:_this.$router.history.current.query.goodsId+'',xnum:_this.xnum+''}})
 			   }
 	       	this.carbool=false;
 	       }

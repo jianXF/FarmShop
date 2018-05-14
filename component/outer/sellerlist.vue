@@ -3,20 +3,17 @@
 	<div>
 		<div class="back" :style="{display: tipsbool==true?'block':'none'}" @click="changeHide"></div>
 	<div class="tips" :style="{display: tipsbool==true?'block':'none'}">
-		<a href="#/totaltab/shouye"><i class="iconfont icon-store"></i><p>首页</p></a>
-		<a href="#/totaltab/shopcar"><i class="iconfont icon-cart"></i><p>购物车</p></a>
-		<a href="#/letterword"><i class="iconfont icon-comments"></i><p>我的反馈</p></a>
-		<a href="#/collet"><i class="iconfont icon-favorites"></i><p>我的收藏</p></a>
+		<xfourlist />
 	</div>
     <div class="sellslist">
         <header>
-        	<a href="#/totaltab/index" class="iconfont icon-back"></a>
-        	<a href="#/search">
+        	<a  @click="goBack" class="iconfont icon-back"></a>
+        	<a href="#/search?isgoods=2">
         		<input type="text"/>
         	</a>
         	<p class="iconfont icon-category" @click="changetips"></p>
         </header>
-        <xselllist class="xselllist"/>
+        <xselllist class="xselllist" :sellerList="sellerList"/>
         <p class="nonegood">亲，已经没有店铺了哦</p>
     </div>
 	</div>
@@ -24,17 +21,48 @@
 </template>
 
 <script>
-    import xselllist from "../common/selllist.vue"
+	import xselllist from "../common/selllist.vue";
+	import xfourlist from "../common/fourlist.vue";
+	import $ from "jquery";
     export default{
         components:{
-            xselllist
+			xselllist,
+			xfourlist
         },
         data(){
         	return {
         		xtab:1,
-        		tipsbool:false
+				tipsbool:false,
+				sellerList:[]
         	}
-        },
+		},
+		async mounted(){
+			const _this= this;
+			if(this.$router.history.current.query.sellerTitle){
+				await $.ajax({
+						url:"http://localhost:2014/find/seller/title",
+						type:"GET",
+						data:{
+							title:this.$router.history.current.query.sellerTitle,
+							limit:'max'
+						},
+						success:function(data){
+							_this.sellerList = data;
+						}
+					});
+			}else{
+				await $.ajax({
+					url:"http://localhost:2014/sellerAll",
+					type:"GET",
+					data:{
+						limit:'max'
+					},
+					success:function(data){
+						_this.sellerList = data;
+					}
+				});
+			}
+		},
        
         methods:{ 
         	//点击不同的排序方式
@@ -48,7 +76,10 @@
         	//功能卡显示，点击back隐藏
         	changeHide(){
         		this.tipsbool=false;
-        	}
+			},
+			goBack(){
+				this.$router.go(-1);
+			}
         }
     }
 </script>
@@ -129,20 +160,7 @@
 	background-color: white;
 	display: none;
 }
-.tips a{
-	height:3rem;
-	line-height: 3rem;
-	width:10rem;
-	display: flex;
-}
-.tips a>i{
-	width: 30%;
-	text-align: center;
-}
-.tips a>p{
-	width: 70%;
-	border-bottom: 1px solid #f3f2f2;
-}
+
 .back{
 	position: fixed;
 	width: 100%;

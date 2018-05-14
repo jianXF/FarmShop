@@ -5,10 +5,7 @@
     	<!--加入购物车的背景覆盖-->
     	<div class="back1" :style="{display:carbool==true?'block':'none'}" @click="cancalAdd"></div>
 		<div class="tips" :style="{display: tipsbool==true?'block':'none'}">
-			<a href="#/totaltab/index"><i class="iconfont icon-store"></i><p>首页</p></a>
-			<a href="#/totaltab/classify"><i class="iconfont icon-cart"></i><p>分类</p></a>
-			<a href="#/letterword"><i class="iconfont icon-comments"></i><p>我的反馈</p></a>
-			<a href="#/collet"><i class="iconfont icon-favorites"></i><p>我的收藏</p></a>
+			<xfourlist />
 		</div>
         <header>
         	<div><a href="#/totaltab/mine" class="iconfont icon-back"></a>
@@ -22,138 +19,40 @@
         	<p :class="xtab==4?'p_c':''" @click="changeXtab(4)">待收货</p>
         	<p :class="xtab==5?'p_c':''" @click="changeXtab(5)">待评价</p>
         </section>
-        <div class="con" :style="{display:xtab=='1'?'block':'none'}">
-        		<div class="nothing">
+        <div class="con" >
+        		<div class="nothing" v-if="orderList.length==0">
         			<p>您还没有相关的订单</p>
         			<span>可以去看看有哪些想买的</span>
         		</div>
-				<div class='list'>
+				<div class='list' v-for="i in orderList">
         		<header>
-        			<p>
-        				<span>是大家分开店铺</span>
+        			<p @click="clickSellerinfo(i)">
+        				<span v-text="i.sellerTitle"></span>
         				<i class="iconfont icon-more"></i>
         			</p>
-        			<span>卖家已发货</span>
+        			<span v-if="i.status==2">卖家待发货</span>
+					<span v-if="i.status>2">卖家已发货</span>
+					<span v-if="i.status==1">卖家未付款</span>
         		</header>
         		<div class="center">
-        			<img :src='src' />
+        			<img :src='i.logo' />
         			<div class='title'>
-        				<p>
-        					笔记本电脑做桌床上用移动可折叠升降宿舍懒人桌子简易学习小书桌
-        				</p>
-        				<i>
-        					技术开发将加快
-        				</i>
+        				<p v-text="i.title"></p>
+        				<i v-text="'运费：'+i.delivery"></i>
         			</div>
         			<div class="money">
-        				<p>￥435.56</p>
-        				<p>X1</p>
+        				<p v-text="'￥'+i.goodsPrice" ></p>
+        				<p v-text="'X'+i.goodsNum">X1</p>
         			</div>
         		</div>
         		<footer>
-        			<span>确认收货</span>
+        			<span v-if="i.status==1" @click="sendmoney(i)">付款</span>
+					<span v-if="i.status>1 && i.status<4">确认收货</span>
+					<span v-if="i.status==4">待评价</span>
         		</footer>
         	</div>
-        	<div class='list'>
-        		<header>
-        			<p>
-        				<span>是大家分开店铺</span>
-        				<i class="iconfont icon-more"></i>
-        			</p>
-        			<span>卖家已发货</span>
-        		</header>
-        		<div class="center">
-        			<img :src='src' />
-        			<div class='title'>
-        				<p>
-        					笔记本电脑做桌床上用移动可折叠升降宿舍懒人桌子简易学习小书桌
-        				</p>
-        				<i>
-        					技术开发将加快
-        				</i>
-        			</div>
-        			<div class="money">
-        				<p>￥435.56</p>
-        				<p>X1</p>
-        			</div>
-        		</div>
-        		<footer>
-        			<span>确认收货</span>
-        		</footer>
-        	</div>
+        	
         
-        </div>
-    	<div class="con" :style="{display:xtab=='2'?'block':'none'}">
-        		<div class="nothing">
-        			<p>您还没有相关的订单</p>
-        			<span>可以去看看有哪些想买的</span>
-        		</div>        
-        </div>
-        <div class="con" :style="{display:xtab=='3'?'block':'none'}">
-        	<div class='list'>
-        		<header>
-        			<p>
-        				<span>是大家分开店铺</span>
-        				<i class="iconfont icon-more"></i>
-        			</p>
-        			<span>卖家已发货</span>
-        		</header>
-        		<div class="center">
-        			<img :src='src' />
-        			<div class='title'>
-        				<p>
-        					笔记本电脑做桌床上用移动可折叠升降宿舍懒人桌子简易学习小书桌
-        				</p>
-        				<i>
-        					技术开发将加快
-        				</i>
-        			</div>
-        			<div class="money">
-        				<p>￥435.56</p>
-        				<p>X1</p>
-        			</div>
-        		</div>
-        		<footer>
-        			<span>确认收货</span>
-        		</footer>
-        	</div>      
-        </div>
-    	<div class="con" :style="{display:xtab=='4'?'block':'none'}">
-        		<div class="nothing">
-        			<p>您还没有相关的订单</p>
-        			<span>可以去看看有哪些想买的</span>
-        		</div>        
-        </div>
-        <div class="con" :style="{display:xtab=='5'?'block':'none'}">
-        	<div class='list'>
-        		<header>
-        			<p>
-        				<span>是大家分开店铺</span>
-        				<i class="iconfont icon-more"></i>
-        			</p>
-        			<span>卖家已发货</span>
-					
-        		</header>
-        		<div class="center">
-        			<img :src='src' />
-        			<div class='title'>
-        				<p>
-        					笔记本电脑做桌床上用移动可折叠升降宿舍懒人桌子简易学习小书桌
-        				</p>
-        				<i>
-        					技术开发将加快
-        				</i>
-        			</div>
-        			<div class="money">
-        				<p>￥435.56</p>
-        				<p>X1</p>
-        			</div>
-        		</div>
-        		<footer>
-					<span>评价</span>
-        			<span>确认收货</span>
-        		</footer>
-        	</div>      
         </div>
     
     </div>
@@ -162,24 +61,62 @@
 
 <script>
 	import src from "../../img/user.jpg";
+	import xfourlist from "../common/fourlist.vue";
+	import $ from "jquery";
+	import Vant from 'vant';
+	import { Dialog,Toast } from 'vant';
     //import xheader from "../common/xheader.vue"
     export default{
         components:{
-            //xfooter
+            xfourlist
         },
         data(){
         	return {
-        		src:src,
+				src:src,
+				orderList:[],
         		tipsbool:false,//右上角的弹出框控制
         		carbool:false,	//加入购物车选择的弹出框
         		xtab:1,			//选项卡id
         	}
-        },
+		},
+		async mounted(){
+			this.xtab=this.$store.state.selectOrder;
+			 const _this= this;
+            await $.ajax({
+				url:"http://localhost:2014/orderAll",
+				type:"GET",
+				data:{
+					userId:sessionStorage.getItem("userId"),
+					status:_this.xtab==1?-1:_this.xtab-1
+				},
+				success:function(data){
+					for(var i of data){
+						i.logo=i.imgLogo.split(";")[0];
+					}
+					_this.orderList=data;
+				}
+            });
+		},
         methods:{
 			
         	////选择选项卡，显示不同信息
-        	changeXtab(id){
-        		this.xtab=id;
+        	async changeXtab(id){
+				const _this =this;
+				this.xtab=id;
+				await $.ajax({
+				url:"http://localhost:2014/orderAll",
+				type:"GET",
+				data:{
+					userId:sessionStorage.getItem("userId"),
+					status:id==1?-1:id-1
+				},
+				success:function(data){
+					for(var i of data){
+						i.logo=i.imgLogo.split(";")[0];
+					}
+					_this.orderList=data;
+				}
+            });
         	},
         	//点击头部右边选择功能
         	changetips(){
@@ -195,11 +132,48 @@
 	       	//取消添加购物车（点击叉叉）
 	       cancalAdd(){
 	       	this.carbool=false;
-	       }
-		},
-		mounted(){
-			this.xtab=this.$store.state.selectOrder;
-			
+		   },
+		   clickSellerinfo(i){
+			   this.$router.push({path:'sellerinfo',query:{sellerId:i.sellerId}})
+		   },
+		   //点击订单付款事件
+		   sendmoney(val){
+			   const _this =this;
+			   Dialog.confirm({
+					title: '是否付款'
+				}).then(async() => {
+					console.log(123);
+					await $.ajax({
+						url:"http://localhost:2014/order/update",
+						type:"POST",
+						data:{
+							orderId:val.orderId,
+							status:'2'
+						},
+						success:function(data){
+							if(data=="success"){
+								Toast.success("付款成功");
+							}
+						}
+					});
+					await $.ajax({
+						url:"http://localhost:2014/orderAll",
+						type:"GET",
+						data:{
+							userId:sessionStorage.getItem("userId"),
+							status:_this.xtab==1?-1:_this.xtab-1
+						},
+						success:function(data){
+							for(var i of data){
+								i.logo=i.imgLogo.split(";")[0];
+							}
+							_this.orderList=data;
+						}
+					});
+				}).catch(() => {
+				// on cancel
+				});
+		   }
 		}
     }
 </script>
@@ -325,17 +299,19 @@ section>.p_c{
 }
 .list>.center>.title{
 	padding: 0 1rem;
+	width:50%;
 	
 }
 .list>.center>.title p{
 	color:black;
-	font-size: 1.2rem;
+	font-size: 1.4rem;
 	margin-bottom: 2px;
 	width:94%;
 }
 .list>.center>.title i{
 	font-size: 1.1rem;
 	width:94%;
+	line-height: 2.5rem;
 }
 .list>.money{
 	text-align: right;
@@ -346,10 +322,12 @@ section>.p_c{
 	font-weight: 800;
 	text-align: right;
 	font-size: 1.3rem;
+	line-height: 1.5rem;
 }
 .list .money>p:nth-of-type(2){
 	color:#999999;
 	text-align: right;
+	line-height: 2.5rem;
 }
 .list>footer{
 	height: 2rem;

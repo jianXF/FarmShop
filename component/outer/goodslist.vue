@@ -3,11 +3,8 @@
 	<div>
 		<div class="back" :style="{display: tipsbool==true?'block':'none'}" @click="changeHide"></div>
 		<div class="tips" :style="{display: tipsbool==true?'block':'none'}">
-		<a href="#/totaltab/shouye"><i class="iconfont icon-store"></i><p>首页</p></a>
-		<a href="#/totaltab/shopcar"><i class="iconfont icon-cart"></i><p>购物车</p></a>
-		<a href="#/letterword"><i class="iconfont icon-comments"></i><p>我的反馈</p></a>
-		<a href="#/collet"><i class="iconfont icon-favorites"></i><p>我的收藏</p></a>
-	</div>
+			<xfourlist />
+		</div>
     <div class="goodslist">
         <header>
         	<a @click="goback" class="iconfont icon-back"></a>
@@ -32,10 +29,12 @@
 
 <script>
 	import $ from "jquery";
-    import xgoodlist from "../common/goodlist.vue"
+	import xgoodlist from "../common/goodlist.vue";
+	import xfourlist from "../common/fourlist.vue";
     export default{
         components:{
-            xgoodlist
+			xgoodlist,
+			xfourlist
         },
         data(){
         	return {

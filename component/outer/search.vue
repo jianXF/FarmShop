@@ -10,8 +10,8 @@
         </header>
         <ul>
         	<li v-for="i in titleArr">
-        		<p v-text="i.title" @click="goodsInfo(i.goodsId)"></p>
-        		<i class="iconfont icon-skip" @click="changeInput(i.title)"></i>
+        		<p v-text="isgoods==1?i.title:i.sellerTitle" @click="goodsInfo(isgoods==1?i.goodsId:i.sellerId)"></p>
+        		<i class="iconfont icon-skip" @click="changeInput(isgoods==1?i.title:i.sellerTitle)"></i>
         	</li>
         </ul>
     </div>
@@ -28,50 +28,79 @@
         data(){
         	return {
 				inputValue:"",
-				titleArr:[]
+				titleArr:[],
+				isgoods:0
         	}
-        },
+		},
+		mounted(){
+			this.isgoods=this.$router.history.current.query.isgoods;
+		},
         methods:{
         	clearInput(){
         		this.inputValue="";
 			},
 			async findGoods(){
 				const _this =this;
-				await $.ajax({
-                url:"http://localhost:2014/find/goods/title",
-                type:"GET",
-                data:{
-					xtab:'1',
-					title:_this.inputValue
-                },
-                success:function(data){
-                    var newdata = [];
-                    if(data.length>8){
-                        newdata.push(data[0]);
-                        newdata.push(data[1]);
-						newdata.push(data[2]);
-						newdata.push(data[3]);
-                        newdata.push(data[4]);
-						newdata.push(data[5]);
-						newdata.push(data[6]);
-                        newdata.push(data[7]);
-                    }else{
-                        newdata = data;
-                    }
-					_this.titleArr = newdata;
-                }
-            });
+				if(this.isgoods==1){
+					await $.ajax({
+						url:"http://localhost:2014/find/goods/title",
+						type:"GET",
+						data:{
+							xtab:'1',
+							title:_this.inputValue
+						},
+						success:function(data){
+							var newdata = [];
+							if(data.length>8){
+								newdata.push(data[0]);
+								newdata.push(data[1]);
+								newdata.push(data[2]);
+								newdata.push(data[3]);
+								newdata.push(data[4]);
+								newdata.push(data[5]);
+								newdata.push(data[6]);
+								newdata.push(data[7]);
+							}else{
+								newdata = data;
+							}
+							_this.titleArr = newdata;
+						}
+					});
+				}else{
+					await $.ajax({
+						url:"http://localhost:2014/find/seller/title",
+						type:"GET",
+						data:{
+							title:_this.inputValue,
+							limit:'8'
+						},
+						success:function(data){
+							_this.titleArr = data;
+						}
+					});
+				}
+				
 			},
 			changeInput(title){
 				this.inputValue=title;
 			},
 			//跳转详情
-			goodsInfo(goodsId){
-				this.$router.push({path:'/goodsinfo?',query:{goodsId:goodsId}});
+			goodsInfo(id){
+				if(this.isgoods==1){
+					this.$router.push({path:'/goodsinfo?',query:{goodsId:id}});	
+				}else{
+					this.$router.push({path:'/sellerinfo?',query:{sellerId:id}});	
+				}
+				
 			},
 			//跳转列表
 			goodslist(){
-				this.$router.push({path:'/goodslist',query: {type:'title',value:this.inputValue}});
+				if(this.isgoods==1){
+					this.$router.push({path:'/goodslist',query: {type:'title',value:this.inputValue}});
+				}else{
+					this.$router.push({path:'/sellerlist?',query:{sellerTitle:this.inputValue}});	
+				}
+				
 			},
 			//返回上一页
 			goBack(){

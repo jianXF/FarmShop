@@ -1,7 +1,7 @@
 <template>
 	<header class="scinfo">
 		<p class="iconfont icon-store"></p>
-		<a href="#/search">
+		<a href="#/search?isgoods=1">
 			<i class="iconfont icon-search"></i>
 			<span>点击搜索你需要的商品</span>
 		</a>

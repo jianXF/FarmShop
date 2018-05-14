@@ -34,6 +34,17 @@
 			@input='checkPass'
 		    required
 		  />
+		  <van-field
+		    v-model="repassword"
+		    type="password"
+		    label="重复密码"
+		    icon="clear"
+		    @click-icon="password = ''"
+		    placeholder="请再次输入密码"
+		    :error-message='tip.repass'
+			@input='checkrePass'
+		    required
+		  />
 		</van-cell-group>
 		<van-button  type='primary' style='marginTop:1rem' @click='regSubmit'>登  录</van-button>
 		<p class='selectType'>
@@ -58,9 +69,11 @@
         		src:src,
 				tel:'',
 				password:'',
+				repassword:'',
 				tip:{
 					tel:'',
-					pass:''
+					pass:'',
+					repass:''
 				},
 				head_src:src
         	}
@@ -85,6 +98,14 @@
         		}else{
         			this.tip.pass='';
         		}
+			},
+			checkrePass(){
+				if(this.password!=this.repassword){
+					this.tip.repass='两次密码输入不一致，请重新输入';
+				}else{
+					this.tip.repass='';
+				}
+
 			},
 			//上传头像事件
 			 onRead(file) {
@@ -120,7 +141,7 @@
 							success: function(data){
 								if(data=='success'){
 									Toast.success('注册成功');
-									_this.$router.push({path:'/login'});
+									_this.$router.go(-1);
 								}else{
 									Toast.fail('注册失败');
 								}

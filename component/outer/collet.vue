@@ -11,10 +11,10 @@
         </div>
         <van-tabs  style="marginTop:46px">
             <van-tab  :title="'宝贝'">
-                <xgoodlist />
+                <xgoodlist :goodsArr="goodsArr" :isCollet="true"/>
             </van-tab>
             <van-tab  :title="'店铺'">
-                <xselllist />
+                <xselllist :sellerList="sellerList" :isCollet="true"/>
             </van-tab>
         </van-tabs>
     </div>
@@ -24,6 +24,7 @@
 <script>
     import xgoodlist from "../common/goodlist.vue";
     import xselllist from "../common/selllist.vue";
+    import $ from "jquery";
     export default{
         components:{
             xgoodlist,
@@ -31,12 +32,40 @@
         },
         data(){
             return{
-                title:['宝贝','店铺']
+                title:['宝贝','店铺'],
+                sellerList:[],
+                goodsArr:[]
             }
+        },
+        async mounted(){
+            const _this=this;
+            await $.ajax({
+				url:"http://localhost:2014/colletAll",
+				type:"GET",
+				data:{
+                    userId:sessionStorage.getItem("userId"),
+                    colletType:1
+				},
+				success:function(data){
+					_this.sellerList = data;
+				}
+            });
+             await $.ajax({
+				url:"http://localhost:2014/colletAll",
+				type:"GET",
+				data:{
+                    userId:sessionStorage.getItem("userId"),
+                    colletType:2
+				},
+				success:function(data){
+                    _this.goodsArr = data;
+                    console.log(data);
+				}
+			});
         },
         methods:{
             onClickLeft(){
-                this.$router.push({path:'/totaltab/mine'});
+                this.$router.go(-1);
             }
         }
     }
