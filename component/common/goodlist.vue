@@ -2,6 +2,7 @@
 	<div>
 		<ul class="goodlist" v-if="!isCollet">
 			<li v-for="i in goodsArr" >
+				
 				<a  @click="goodsinfo(i.goodsId)"><img :src="i.imgLogo.split(';')[0]"/></a>
 				<p v-text="i.title"></p>
 				<p>
@@ -19,6 +20,7 @@
 		</ul>
 		<ul class="goodlist" v-if="isCollet" >
 			<li v-for="i in goodsArrs" @touchstart="Loop_Sub(i)" @touchend="clearLoop()">
+				<div class="goodsup" v-if="i.status!=2"><p>此商品已下架</p></div>
 				<a  @click="goodsinfo(i.goodsId)" ><img :src="i.imgLogo.split(';')[0]"/></a>
 				<p v-text="i.title"></p>
 				<p>
@@ -118,6 +120,7 @@
 	box-sizing: border-box;
 	padding:1rem;
 	margin-top: 3px;
+	position:relative;
 }
 .goodlist>li img{
 	width: 100%;
@@ -169,5 +172,21 @@
 
 .delivery{
 	color:#A0A0A0;
+}
+.goodsup{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	z-index:10;
+	background:#35343469;
+	font-size:20px;
+	text-align:center;
+
+}
+.goodsup p{
+	margin-top:45%;
+	color:white;
 }
 </style>

@@ -108,7 +108,7 @@ app.get('/find/goods/kindId', function(req,res) {
 app.get('/find/goods', function(req,res) {
     res.append("Access-Control-Allow-Origin","*");
 
-    var sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and b.kindId=a.kindId order by upTime DESC`;
+    var sql=`SELECT a.*,b.* FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and b.isSell=1 and b.kindId=a.kindId order by upTime DESC`;
     connection.query(sql, function (error, results, fields) {   
         if (error) throw error;
         res.send(results);
@@ -121,16 +121,20 @@ app.get('/find/goods/isBargain', function(req,res) {
     var sql='';
     switch(req.query.xtab){
         case '1':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and isBargain=1 and b.kindId=a.kindId order by upTime DESC`;
+        sql=`SELECT a.*,b.* FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+        b.isSell=1 and b.isBargain=1 and b.kindId=a.kindId order by upTime DESC`;
             break;
         case '2':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and isBargain=1 and b.kindId=a.kindId order by sellnum DESC`;
+        sql=`SELECT a.*,b.* FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and b.isBargain=1 and b.kindId=a.kindId order by sellnum DESC`;
         break;
         case '3':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and isBargain=1 and b.kindId=a.kindId order by price_o DESC`;
+        sql=`SELECT a.*,b.* FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and b.isBargain=1 and b.kindId=a.kindId order by price_o DESC`;
         break;
         case '4':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and isBargain=1 and b.kindId=a.kindId order by price_o ASC`;
+        sql=`SELECT a.*,b.* FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and b.isBargain=1 and b.kindId=a.kindId order by price_o ASC`;
         break;
     }
     connection.query(sql, function (error, results, fields) {   
@@ -145,16 +149,20 @@ app.get('/find/goods/oId', function(req,res) {
     var sql='';
     switch(req.query.xtab){
         case '1':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and oId=${req.query.oId} and b.kindId=a.kindId order by upTime DESC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and a.oId=${req.query.oId} and b.kindId=a.kindId order by upTime DESC`;
             break;
         case '2':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and oId=${req.query.oId} and b.kindId=a.kindId order by sellnum DESC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+        b.isSell=1 and a.oId=${req.query.oId} and b.kindId=a.kindId order by sellnum DESC`;
         break;
         case '3':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and oId=${req.query.oId} and b.kindId=a.kindId order by price_o DESC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+        b.isSell=1 and a.oId=${req.query.oId} and b.kindId=a.kindId order by price_o DESC`;
         break;
         case '4':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and oId=${req.query.oId} and b.kindId=a.kindId order by price_o ASC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+        b.isSell=1 and a.oId=${req.query.oId} and b.kindId=a.kindId order by price_o ASC`;
         break;
     }
     connection.query(sql, function (error, results, fields) {   
@@ -169,16 +177,20 @@ app.get('/find/goods/title', function(req,res) {
     var sql='';
     switch(req.query.xtab){
         case '1':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and title like '%${req.query.title}%' and b.kindId=a.kindId order by upTime DESC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and b.title like '%${req.query.title}%' and b.kindId=a.kindId order by upTime DESC`;
             break;
         case '2':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and title like '%${req.query.title}%' and b.kindId=a.kindId order by sellnum DESC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and b.title like '%${req.query.title}%' and b.kindId=a.kindId order by sellnum DESC`;
         break;
         case '3':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and title like '%${req.query.title}%' and b.kindId=a.kindId order by price_o DESC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and b.title like '%${req.query.title}%' and b.kindId=a.kindId order by price_o DESC`;
         break;
         case '4':
-        sql=`SELECT * FROM goods as b,goods_kind as a where isSell=1 and title like '%${req.query.title}%' and b.kindId=a.kindId order by price_o ASC`;
+        sql=`SELECT a.*,b.*,c.status FROM goods as b,goods_kind as a , seller_info as c where b.sellerId=c.sellerId and c.status=2 and 
+         b.isSell=1 and b.title like '%${req.query.title}%' and b.kindId=a.kindId order by price_o ASC`;
         break;
     }
     connection.query(sql, function (error, results, fields) {   
@@ -190,7 +202,8 @@ app.get('/find/goods/title', function(req,res) {
 //通过商品id查找商品
 app.get('/find/goods/goodsId', function(req,res) {
     res.append("Access-Control-Allow-Origin","*");
-        var sql=`SELECT * FROM goods as b,goods_kind as a , seller_info as c where goodsId=${req.query.goodsId} and b.kindId=a.kindId and b.sellerId = c.sellerId`;
+        var sql=`SELECT * FROM goods as b,goods_kind as a , seller_info as c where
+         goodsId=${req.query.goodsId} and b.kindId=a.kindId and b.sellerId = c.sellerId`;
         connection.query(sql, function (error, results, fields) {   
             if (error) throw error;
             res.send(results[0]);
@@ -439,10 +452,26 @@ app.get('/orderAll', function(req,res) {
     
     });
 });
+//通过订单id查询订单
+app.get('/order/orderId', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    var sql='select * from `order` where orderId= '+`${req.query.orderId}`;
+    console.log(sql);
+    connection.query(sql, function (error, results, fields) {
+        if (error) throw error;
+        if(results.length>0){
+            res.send("success");
+        }else{
+            res.send("fail");
+        }
+        
+    
+    });
+});
 //根据订单状态返回订单的个数
 app.get('/order/colum', function(req,res) {
     res.append("Access-Control-Allow-Origin","*");
-    var sql='select count(*) from `order` where `status`= '+`${req.query.status}`;
+    var sql='select count(*) from `order` where `status`= '+`${req.query.status} and userId = ${req.query.userId}`;
     console.log(sql);
     connection.query(sql, function (error, results, fields) {
         if (error) throw error;
@@ -455,17 +484,19 @@ app.post('/order/update', function(req,res) {
     res.append("Access-Control-Allow-Origin","*");
     const regTime = timeChange();
     var sql='UPDATE `order` SET `status` = ';
+    console.log(req.body.status);
     switch(req.body.status){
         case '2':
-            sql+=`${req.body.status} and buyTime=${regTime} where orderId= ${req.body.orderId}`;
-            break;
-        case '3':
-            sql+=`${req.body.status} and getTime=${regTime} where orderId= ${req.body.orderId}`;
+            sql+=`${req.body.status} , buyTime='${regTime}' where orderId= ${req.body.orderId}`;
             break;
         case '4':
-            sql+=`${req.body.status} and evaTime=${regTime} where orderId= ${req.body.orderId}`;
+            sql+=`${req.body.status}, getTime='${regTime}' where orderId= ${req.body.orderId}`;
+            break;
+        case '5':
+            sql+=`${req.body.status}, evaTime='${regTime}' where orderId= ${req.body.orderId}`;
             break;
     }
+    console.log(sql);
     connection.query(sql, function (error, results, fields) {   
         if (error) throw error;
         res.send('success');
@@ -560,8 +591,8 @@ app.get('/colletAll', function(req,res) {
         sql=`SELECT * FROM collet as a,seller_info as b where colletType=${req.query.colletType} and userId=${req.query.userId} 
             and a.colletId=b.sellerId`;
     }else{
-        sql=`SELECT * FROM collet as a,goods as b where colletType=${req.query.colletType} and userId=${req.query.userId} 
-            and a.colletId=b.goodsId`;
+        sql=`SELECT *,c.status FROM collet as a,goods as b,seller_info as c where colletType=${req.query.colletType} and userId=${req.query.userId} 
+            and a.colletId=b.goodsId and b.sellerId= c.sellerId`;
     }
    console.log(sql);
     connection.query(sql, function (error, results, fields) {   
@@ -570,6 +601,146 @@ app.get('/colletAll', function(req,res) {
         
     });
 });
+
+
+
+//添加评论
+app.post('/evaluate/insert', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    const regTime = timeChange();
+    var type = 0;
+    if(req.body.evaType<=2){
+        type=1;
+    }else if(req.body.evaType>4){
+        type=3;
+    }else{
+        type=2;
+    }
+    var sql=`INSERT INTO evaluate(goodsId,content,evaTime,evaType,userId) VALUES 
+    (${req.body.goodsId},'${req.body.content}','${regTime}',${type},${req.body.userId})`;
+    connection.query(sql, function (error, results, fields) {   
+        if (error) throw error;
+        res.send('success');
+    });
+});
+
+
+//联立order，evaluate进行查询
+app.get('/find/orderInfo', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    var sql=''
+    if(req.query.status==5){
+        sql='SELECT * FROM `order` as a,evaluate as b where '+`a.goodsId = b.goodsId and a.orderId=${req.query.orderId}`;
+    }else{
+        sql='SELECT * FROM `order` where '+` orderId=${req.query.orderId}`;
+    }
+    connection.query(sql, function (error, results, fields) {   
+        if (error) throw error;
+        res.send(results[0]);
+        
+    });
+});
+
+//通过goodsid获取评论
+app.get('/evaluate/goodsId', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    var sql='SELECT b.*,a.tel FROM user_info as a,evaluate as b where '+`a.userId = b.userId and b.goodsId=${req.query.goodsId} `;
+    if(req.query.evaType!=-1){
+        sql+=`and evaType=${req.query.evaType}`;
+    }
+    connection.query(sql, function (error, results, fields) {   
+        if (error) throw error;
+        res.send(results);
+        
+    });
+});
+//var sql='select count(*) from `order` where `status`= '+`${req.query.status}`;
+//通过goodsid获取不同种类评论数量
+app.get('/evaluate/goodsId/colum', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    var sql='SELECT count(*) FROM user_info as a,evaluate as b where '+`a.userId = b.userId and b.goodsId=${req.query.goodsId} `;
+    if(req.query.evaType!=-1){
+        sql+=`and evaType=${req.query.evaType}`;
+    }
+    connection.query(sql, function (error, results, fields) {   
+        if (error) throw error;
+        res.send(results[0]);
+        
+    });
+});
+
+//delete/order
+//取消订单
+app.post('/order/delete', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    var sql2=`UPDATE goods SET sellnum =sellnum-${req.body.goodsNum}, stock =stock+${req.body.goodsNum} where goodsId=${req.body.goodsId}`;
+        connection.query(sql2, function (error, results, fields) {   
+            if (error) throw error;
+        });
+    var sql3=`UPDATE seller_info SET goodsell =goodsell-${req.body.goodsNum} where sellerId=${req.body.sellerId}`;
+    connection.query(sql3, function (error, results, fields) {   
+        if (error) throw error;
+    });
+    console.log(sql2);
+   var sql ='DELETE FROM `order` where '+`orderId=${req.body.orderId}`
+        connection.query(sql, function (error, results, fields) {   
+            if (error) throw error;
+            res.send('success');
+        });
+    
+});
+
+
+//添加反馈意见
+app.post('/feedback/insert', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    const regTime = timeChange();
+    var sql=""
+    if(req.body.orderId){
+        sql=`INSERT INTO feedback(userId,content,feedTime,orderId,feedStatus,isReply) VALUES 
+    (${req.body.userId},'${req.body.content}','${regTime}',${req.body.orderId},1,0)`;
+    }else{
+        sql=`INSERT INTO feedback(userId,content,feedTime,feedStatus,isReply) VALUES 
+        (${req.body.userId},'${req.body.content}','${regTime}',2,0)`;
+    }
+    connection.query(sql, function (error, results, fields) {   
+        if (error) throw error;
+        res.send('success');
+    });
+});
+//通过userId查询出反馈意见
+app.get('/feedbackAll', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+    var sql=`SELECT * FROM feedback  where userId = ${req.query.userId}`;
+    connection.query(sql, function (error, results, fields) {   
+        if (error) throw error;
+        res.send(results);
+        
+    });
+});
+
+//修改用户信息
+app.post('/user/update', function(req,res) {
+    res.append("Access-Control-Allow-Origin","*");
+   // update `seller_info` set password`='123456789' where `sellerIid`=7;
+   var sql='';
+   for(var i in req.body){
+        if(i=='img'){
+            sql=`update user_info set img='${req.body.img}' where userId = ${req.body.userId}`;
+        }else if(i=='tel'){
+            sql=`update user_info set tel='${req.body.tel}' where userId = ${req.body.userId}`;
+        }else if(i=='password'){
+            sql=`update user_info set password='${req.body.password}' where userId = ${req.body.userId}`;
+        }
+    }
+    connection.query(sql, function (error, results, fields) {   
+        if (error) throw error;
+        res.send('success');
+    });
+});
+
+
+
 
 app.listen(2014);
 console.log("开启服务器");

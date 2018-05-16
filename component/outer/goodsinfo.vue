@@ -46,29 +46,30 @@
         </div>
         <!--评价-->
         <div class="list3" :style="{display:xtab=='3'?'block':'none'}">
-        	<nav>
-        		<span :class="xass==1?'span_c':''" @click="changeXass(1)">全部({{assess[0]}})</span>
-        		<span :class="xass==2?'span_c':''" @click="changeXass(2)">好评({{assess[1]}})</span>
-        		<span :class="xass==3?'span_c':''" @click="changeXass(3)">中评({{assess[2]}})</span>
-        		<span :class="xass==4?'span_c':''" @click="changeXass(4)">差评({{assess[3]}})</span>
+			
+        	<nav >
+        		<span :class="xass==-1?'span_c':''" @click="changeXass(-1)">全部({{assess[0]}})</span>
+        		<span :class="xass==3?'span_c':''" @click="changeXass(3)">好评({{assess[1]}})</span>
+        		<span :class="xass==2?'span_c':''" @click="changeXass(2)">中评({{assess[2]}})</span>
+        		<span :class="xass==1?'span_c':''" @click="changeXass(1)">差评({{assess[3]}})</span>
         	</nav>
+			
         	<section>
-        		<li>
-	        		<p><span>s第三方爱上</span><span>2017-04-12</span></p>
-	        		<h4>是空的卡就是积分好卡u树的哈u树丢啊收到卡建行，撒大家卡卡，暗室逢灯暗室逢灯</h4>
-	        		<span>店家回复：是地方还是开始时开始计划地方灰色空间电话回访,经济健康金沙和地方哈库拉合肥市。阿萨德苦海哈看得见风景、</span>
-	        		<div>
-	        			<img :src="src"/>
-	        			<img :src="src"/>
-	        			<img :src="src"/>
-	        			<img :src="src"/>
-	        			<img :src="src"/>
-	        		</div>
+				<h3 class="nothing" v-if="evaluate.length==0" >
+        			<p>该宝贝暂未有此评价</p>
+        			<span>等待您的评价哦</span>
+        		</h3>
+        		<!-- <li>'12345678901'.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'); -->
+				<li v-for="i in evaluate">
+	        		<p><span v-text="i.tel"></span><span v-text="i.evaTime.substr(0,8)"></span></p>
+	        		<h4 v-text="i.content"></h4>
+	        		<span v-if="i.isReply==1" v-text="'店家回复:'+i.repalyCon"></span>
         		</li>
         	</section>
         </div>
+
         <footer>
-        	<a href="#/sellerinfo">
+        	<a :href="'#/sellerinfo?sellerId='+goodsDate.sellerId">
         		<i class="iconfont icon-store"></i>
         		<span>店铺</span>
         	</a>
@@ -118,13 +119,14 @@
         		xtab:1,	//选项卡控制
         		tipsbool:false,//右上角的弹出框控制
         		src:src,
-        		assess:[435,35,865,234],//评价数量
-        		xass:1,  //评价中的评论等级选择
+        		assess:[],//评价数量
+        		xass:-1,  //评价中的评论等级选择
         		colletbool:false,     //是否收藏
 				xnum:1,	//加入购物车的数量
 				type:1, //是1-加入购车还是2-立即购买
 				carbool:false,	//加入购物车/立即购买选择的弹出框
-				goodsDate:{}
+				goodsDate:{},
+				evaluate:[]   //评论
  			}
 		},
 		async mounted(){
@@ -152,20 +154,50 @@
                     }
 				}
 			});
+			for(var i=0;i<=3;i++){
+				await $.ajax({
+					url:"http://localhost:2014/evaluate/goodsId/colum",
+					type:"GET",
+					data:{
+						goodsId:goodsId,
+						evaType:i==0?'-1':i
+					},
+					success:function(data){
+						_this.assess.push(data['count(*)']);
+					}
+				});
+			}
 			await $.ajax({
-                url:"http://localhost:2014/collet/find",
-                type:"GET",
-                data:{
-                    userId:sessionStorage.getItem("userId"),
-                    colletType:2,
-                    colletId:goodsId
-                },
-                success:function(data){
-                    if(data=="success"){
-                        _this.colletbool = true;
-                    }
-                }
-            });
+					url:"http://localhost:2014/evaluate/goodsId",
+					type:"GET",
+					data:{
+						goodsId:goodsId,
+						evaType:'-1'
+					},
+					success:function(data){
+						_this.evaluate=data;
+						for(var obj of data){
+							obj.tel = obj.tel.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'); 
+						}
+					}
+				});
+			if(sessionStorage.getItem("userId")){
+				await $.ajax({
+					url:"http://localhost:2014/collet/find",
+					type:"GET",
+					data:{
+						userId:sessionStorage.getItem("userId"),
+						colletType:2,
+						colletId:goodsId
+					},
+					success:function(data){
+						if(data=="success"){
+							_this.colletbool = true;
+						}
+					}
+				});
+			}
+			
 		},
         methods:{
         	//选择选项卡，显示不用信息
@@ -181,46 +213,74 @@
         		this.tipsbool=false;
         	},
         	//评价中的评论等级选择
-        	changeXass(id){
-        		this.xass=id;
+        	async changeXass(id){
+				this.xass=id;
+				const _this = this;
+				var goodsId = this.$router.history.current.query.goodsId;
+				await $.ajax({
+					url:"http://localhost:2014/evaluate/goodsId",
+					type:"GET",
+					data:{
+						goodsId:goodsId,
+						evaType:_this.xass
+					},
+					success:function(data){
+						_this.evaluate=data;
+						for(var obj of data){
+							obj.tel = obj.tel.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'); 
+						}
+					}
+				});
+				
         	},
         	//将该商品收藏或取消收藏
         	async colletGoods(goods){
 				const _this= this;
-        		//商品未收藏
-        		if(this.colletbool==false){
-					 await $.ajax({
-                        url:"http://localhost:2014/collet/insert",
-                        type:"post",
-                        data:{
-                            userId:sessionStorage.getItem("userId"),
-                            colletType:2,
-                            colletId:goods.goodsId
-                        },
-                        success:function(data){
-                            if(data=="success"){
-                                _this.colletbool=true;
-                                Toast.success('收藏成功');
-                            }
-                        }
-                    });
-        		}else{
-					await $.ajax({
-                        url:"http://localhost:2014/collet/delete",
-                        type:"post",
-                        data:{
-                            userId:sessionStorage.getItem("userId"),
-                            colletType:2,
-                            colletId:goods.goodsId
-                        },
-                        success:function(data){
-                            if(data=="success"){
-                                _this.colletbool=false;
-                                Toast.success('取消收藏');
-                            }
-                        }
-                    });
-        		}
+				//商品未收藏
+				if(sessionStorage.getItem("userId")){
+					if(this.colletbool==false){
+						await $.ajax({
+							url:"http://localhost:2014/collet/insert",
+							type:"post",
+							data:{
+								userId:sessionStorage.getItem("userId"),
+								colletType:2,
+								colletId:goods.goodsId
+							},
+							success:function(data){
+								if(data=="success"){
+									_this.colletbool=true;
+									Toast.success('收藏成功');
+								}
+							}
+						});
+					}else{
+						await $.ajax({
+							url:"http://localhost:2014/collet/delete",
+							type:"post",
+							data:{
+								userId:sessionStorage.getItem("userId"),
+								colletType:2,
+								colletId:goods.goodsId
+							},
+							success:function(data){
+								if(data=="success"){
+									_this.colletbool=false;
+									Toast.success('取消收藏');
+								}
+							}
+						});
+					}
+				}else{
+					 Dialog.confirm({
+						title: '是否登陆',
+						message: '只有登陆才能操作此功能'
+						}).then(() => {
+							this.$router.push({path:'/login'});
+						}).catch(() => {
+					});
+				}
+        		
         	},
         	//点击添加数量按钮
 	        addNum(){
@@ -464,7 +524,7 @@
 	background-color: white;
 	}
 .list3{
-	padding-bottom: 4rem;
+	
 }
 .list2>ul{
 	display:flex;
@@ -710,5 +770,21 @@ footer>h4:last-of-type{
 	background-color: #EE4F4F;
 	letter-spacing: 2rem;
 	
+}
+.nothing{
+	height:20rem;
+}
+.nothing>p{
+	font-size: 1.7rem;
+	color: #686868;
+	padding-top:8rem;
+	text-align: center;
+	margin-bottom: 1rem;
+}
+.nothing>span{
+	font-size: 1.2rem;
+	color: #ACACAC;
+	display: block;
+	text-align: center;
 }
 </style>

@@ -34,7 +34,7 @@
 					<span v-if="i.status>2">卖家已发货</span>
 					<span v-if="i.status==1">卖家未付款</span>
         		</header>
-        		<div class="center">
+        		<div class="center" @click="showinfo(i)">
         			<img :src='i.logo' />
         			<div class='title'>
         				<p v-text="i.title"></p>
@@ -46,15 +46,46 @@
         			</div>
         		</div>
         		<footer>
+					<span v-if="i.status==1" @click="deleteOrder(i)">取消订单</span>
         			<span v-if="i.status==1" @click="sendmoney(i)">付款</span>
-					<span v-if="i.status>1 && i.status<4">确认收货</span>
-					<span v-if="i.status==4">待评价</span>
+					<span v-if="i.status==3" @click="getGoods(i)">确认收货</span>
+					<span v-if="i.status==4" @click="clickAssment(i)">去评价</span>
+					<p v-if="i.status==5">该订单已完成</p>
         		</footer>
         	</div>
         	
         
         </div>
-    
+		<van-dialog
+			v-model="dialogBool"
+			:before-close="beforeClose"
+			>
+			<van-steps direction="vertical" :active="orderInfo.status-1" active-color="#f60">
+				<van-step>
+					<h3>订单生产</h3>
+					<p v-text="'订单编号：'+orderInfo.goodsId"></p>
+					<p v-text="orderInfo.status<=5?orderInfo.orderTime.substr(0,8):''"></p>
+				</van-step>
+				<van-step>
+					<h3>付款</h3>
+					<p v-text="orderInfo.status<=5&&orderInfo.status>1?orderInfo.buyTime.substr(0,8):''"></p>
+				</van-step>
+				<van-step>
+					<h3>卖家发货</h3>
+					<p v-text="orderInfo.status<=5&&orderInfo.status>2?orderInfo.deliveryName+':'+orderInfo.sendTime.substr(0,8):''"></p>
+					<p v-text="orderInfo.status<=5&&orderInfo.status>2?'快递单号：'+orderInfo.deliveryId:''"></p>
+				</van-step>
+				<van-step>
+					<h3>收货</h3>
+					<p v-text="orderInfo.status<=5&&orderInfo.status>3?orderInfo.getTime.substr(0,8):''"></p>
+				</van-step>
+				<van-step>
+					<h3 >评价</h3>
+					<p v-text="orderInfo.status==5?orderInfo.evaTime.substr(0,8):''"></p>
+					<p v-text="orderInfo.status==5?orderInfo.content:''"></p>	
+				</van-step>
+			</van-steps>
+		</van-dialog>
     </div>
   
 </template>
@@ -76,7 +107,9 @@
 				orderList:[],
         		tipsbool:false,//右上角的弹出框控制
         		carbool:false,	//加入购物车选择的弹出框
-        		xtab:1,			//选项卡id
+				xtab:1,			//选项卡id
+				dialogBool:false,
+				orderInfo:{}
         	}
 		},
 		async mounted(){
@@ -152,7 +185,7 @@
 						},
 						success:function(data){
 							if(data=="success"){
-								Toast.success("付款成功");
+								Toast.success("付款成功");	
 							}
 						}
 					});
@@ -173,8 +206,104 @@
 				}).catch(() => {
 				// on cancel
 				});
-		   }
-		}
+		   },
+		   //确认收货
+			getGoods(obj){
+			   const _this =this;
+			    Dialog.confirm({
+					title: '是否确认收货'
+				}).then(async() => {
+					await $.ajax({
+						url:"http://localhost:2014/order/update",
+						type:"POST",
+						data:{
+							orderId:obj.orderId,
+							status:'4'
+						},
+						success:function(data){
+							if(data=="success"){
+								Toast.success("确认收货成功")
+							}
+						}
+					});
+					await $.ajax({
+						url:"http://localhost:2014/orderAll",
+						type:"GET",
+						data:{
+							userId:sessionStorage.getItem("userId"),
+							status:_this.xtab==1?-1:_this.xtab-1
+						},
+						success:function(data){
+							for(var i of data){
+								i.logo=i.imgLogo.split(";")[0];
+							}
+							_this.orderList=data;
+						}
+					});
+				}).catch(() => {
+
+				});
+			   
+		   },
+		   //去评价
+		   clickAssment(obj){
+			   this.$router.push({path:'assessment',query:{orderId:obj.orderId,goodsId:obj.goodsId,logo:obj.logo}});
+		   },
+		   //查看订单详情
+		   async showinfo(obj){
+			   const _this= this;
+			   await $.ajax({
+						url:"http://localhost:2014/find/orderInfo",
+						type:"GET",
+						data:{
+							orderId:obj.orderId,
+							status:obj.status
+						},
+						success:function(data){
+							_this.orderInfo=data;
+						
+						}
+					});
+			   this.dialogBool=true;
+		   },
+		    beforeClose(action, done) {
+				done();
+			},
+			//取消该订单
+			async deleteOrder(obj){
+				const _this= this;
+			   await $.ajax({
+					url:"http://localhost:2014/order/delete",
+					type:"POST",
+					data:{
+						orderId:obj.orderId,
+						goodsId:obj.goodsId,
+						goodsNum:obj.goodsNum,
+						sellerId:obj.sellerId
+					},
+					success:function(data){
+						if(data=='success'){
+							Toast.success('取消订单成功')
+						}
+					
+					}
+				});
+				await $.ajax({
+					url:"http://localhost:2014/orderAll",
+					type:"GET",
+					data:{
+						userId:sessionStorage.getItem("userId"),
+						status:_this.xtab==1?-1:_this.xtab-1
+					},
+					success:function(data){
+						for(var i of data){
+							i.logo=i.imgLogo.split(";")[0];
+						}
+						_this.orderList=data;
+					}
+				});
+			}
+			}
     }
 </script>
 <style scoped>
@@ -358,5 +487,8 @@ section>.p_c{
 	color: #ACACAC;
 	display: block;
 	text-align: center;
+}
+.van-step p{
+	font-size: 1.2rem;
 }
 </style>

@@ -8,9 +8,9 @@
         :thumb="i.img"
         >
         <div slot="footer">
+            <span v-if="i.status!=2" class="sellerddown">该店铺已注销</span>
             <van-button size="mini" v-if="isCollet" style="color:#EE4F4F" @click="cancelCollet(i)">取消收藏</van-button>
-            <van-button size="mini" style="color:#EE4F4F" @click="clickSellerinfo(i)">进入</van-button>
-            
+            <van-button v-if="i.status==2" size="mini" style="color:#EE4F4F" @click="clickSellerinfo(i)">进入</van-button>
         </div> 
     </van-card>
     </div>
@@ -78,16 +78,8 @@
 </script>
 
 <style>
-/* .selllist .van-card{
-    border-bottom: 1px solid #F6F6F6;
+.sellerddown{
+    font-size:1.2rem;
+    color:#EE4F4F;
 }
-.selllist .van-card__row{
-    margin-top: 0.8rem;
-}
-.selllist .van-card__title{
-    font-size: 1.5rem;
-}
-.selllist .van-card__footer{
-    bottom: 15px;
-} */
 </style>

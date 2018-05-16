@@ -30,7 +30,7 @@
 	import	$ from "jquery";
 	import xheader from "../common/header1.vue";
 	import Vant from 'vant';
-	import { Toast  } from 'vant';
+	import { Toast,Dialog  } from 'vant';
     export default{
         components:{
             xheader
@@ -75,9 +75,17 @@
 				this.$router.push({path:'/orderpage'});
 			 },
 			 quitUser(){
-				 sessionStorage.clear();
-				 Toast.success('退出成功');
-				 this.$router.push({path:'/totaltab/index'});
+				 const _this=this;
+				 Dialog.confirm({
+					title: '是否退出登陆'
+				}).then(() => {
+					sessionStorage.clear();
+					Toast.success('退出成功');
+					_this.$router.push({path:'/totaltab/index'});
+				}).catch(() => {
+				// on cancel
+				});
+				 
 			 }
 		},
 		async mounted(){
@@ -88,7 +96,8 @@
 					url:"http://localhost:2014/order/colum",
 					type:"GET",
 					data:{
-						status:i.id
+						status:i.id,
+						userId:sessionStorage.getItem("userId")
 					},
 					success:function(data){
 						i.count=data['count(*)'];

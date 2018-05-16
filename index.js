@@ -29,6 +29,7 @@ import addressinfo from "./component/outer/addressinfo.vue";
 import updateressinfo from "./component/outer/updateressinfo.vue";
 import search from "./component/outer/search.vue";
 import order from "./component/outer/order.vue";
+import updateuser from "./component/outer/updateuser.vue";
 
 //totaltab的子模块
 import shouye from "./component/totaltab/shouye.vue";
@@ -108,6 +109,10 @@ var router = new VueRouter({
         path:"/order",//确认订单
         component:order
     },{
+        path:"/updateuser",//修改用户信息
+        component:updateuser
+    },
+    {
         path:"/",
         redirect:"/totaltab/index"
     },]

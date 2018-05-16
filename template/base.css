@@ -103,3 +103,7 @@ i,em{
 .selllist .van-button--mini{
 	width:70px;
 }
+
+.giveGrade .van-rate__item{
+    padding:7px 2px;
+}

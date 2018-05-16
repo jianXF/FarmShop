@@ -47,7 +47,8 @@
                     colletType:1
 				},
 				success:function(data){
-					_this.sellerList = data;
+                    _this.sellerList = data;
+                    console.log(data);
 				}
             });
              await $.ajax({

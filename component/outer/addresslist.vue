@@ -62,7 +62,7 @@
         methods:{
             //点击标题返回事件
             onClickLeft(){
-                this.$router.push({path:'/totaltab/mine'});
+                this.$router.go(-1);
             },
             //点击新增收货地址
             onAddAddress() {

@@ -7,21 +7,21 @@
         			<span>可以去看看有哪些想买的</span>
         	</h3>
 			<div v-for="i in goodsList" @touchstart="Loop_Sub(i)" @touchend="clearLoop()">
-				<p v-if="i.isSell==0">该商品已下架，请长按删除</p>
-				<p  style="textIndent:1rem" @click="clickSellerinfo(i)">
+				<p v-if="i.isSell==0 || i.status!=2">该商品已下架，请长按删除</p>
+				<p   v-if="i.isSell!=0 && i.status==2" style="textIndent:1rem" @click="clickSellerinfo(i)">
 					<i class="iconfont icon-store"></i>
 					<span v-text="i.sellerTitle"></span>
 					<i  class="iconfont icon-more"></i>
 				</p>
 				<li >
-					<span  @click="i.isSell==1?changebool(i.carId):kong()" :class="i.bool?'iconfont icon-gou span_c':'iconfont icon-gou'"></span>
+					<span  @click="changebool(i.carId)" :class="i.bool?'iconfont icon-gou span_c':'iconfont icon-gou'"></span>
 					<a @click="clickgoodsinfo(i)"><img :src="i.logo"/></a>
 					<div>
 						<p v-text="i.title"></p>
 						<p>运费{{i.delivery}}</p>
 						<p>
 							<span>￥{{i.isBargain==0?i.price_o:i.price_n}}</span>
-							<span><i class="iconfont icon-add add_p" @click="i.isSell==1?addNum(i.carId):kong"></i><input type="text" v-model="i.buyNum"/><i  class="iconfont icon-subtract sub_p" @click="i.isSell==1?subNum(i.carId):kong"></i></span>
+							<span><i class="iconfont icon-add add_p" @click="addNum(i.carId)"></i><input type="text" v-model="i.buyNum"/><i  class="iconfont icon-subtract sub_p" @click="subNum(i.carId)"></i></span>
 						</p>
 					</div>
 				</li>
@@ -69,6 +69,7 @@
 					for(var i of _this.goodsList){
 						i.logo=i.imgLogo.split(";")[0];
 					}
+					console.log(data);
 					
 				}
             });
@@ -96,8 +97,8 @@
         	changebool(carId){
         		for(var i in this.goodsList){
         			if(this.goodsList[i].carId==carId){
-						if(this.goodsList[i].isSell==0){
-							Toast(`库存紧剩${this.goodsList[i].stock}，若想购买，请修改购买数量`);
+						if(this.goodsList[i].isSell==0 ||this.goodsList[i].status!=2){
+							Toast(`全选商品中存在已下架商品，请假此商品删除后再全选`);
 							return;
 						}
 						if(this.goodsList[i].stock<this.goodsList[i].buyNum){
@@ -151,7 +152,8 @@
         		if(this.xbool==true){
 					
         			for(var i in this.goodsList){
-						if(this.goodsList[i].isSell==0){
+						if(this.goodsList[i].isSell==0||this.goodsList[i].status!=2){
+							this.xbool=!this.xbool;
 							Toast(`全选商品中存在已下架商品，请假此商品删除后再全选`);
 							return;
 						}
@@ -180,6 +182,11 @@
         addNum(carId){
         	for(var i in this.goodsList){
         		if(this.goodsList[i].carId==carId){
+					if(this.goodsList[i].isSell==0||this.goodsList[i].status!=2){
+							this.xbool=!this.xbool;
+							Toast(`该商品已下架`);
+							return;
+						}
 					if(this.goodsList[i].stock<this.goodsList[i].buyNum){
 							Toast('库存不足，不能添加');
 							return;
@@ -202,6 +209,11 @@
         subNum(carId){
         	for(var i in this.goodsList){
     			if(this.goodsList[i].carId==carId){
+					if(this.goodsList[i].isSell==0||this.goodsList[i].status!=2){
+							this.xbool=!this.xbool;
+							Toast(`该商品已下架`);
+							return;
+						}
     				if(this.goodsList[i].buyNum==1){
     					return;
     				}else{
@@ -267,6 +279,10 @@
 
 		},
 		clickgoodsinfo(i){
+			if(i.isSell==0 || i.status!=2){
+				Toast(`该商品已下架`);
+				return ;
+			}
 			this.$router.push({path:'/goodsInfo',query:{goodsId:i.goodsId}});
 		},
 		clickSellerinfo(i){

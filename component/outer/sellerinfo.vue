@@ -67,20 +67,23 @@
                     }
                 }
             });
-            await $.ajax({
-                url:"http://localhost:2014/collet/find",
-                type:"GET",
-                data:{
-                    userId:sessionStorage.getItem("userId"),
-                    colletType:1,
-                    colletId:sellerId
-                },
-                success:function(data){
-                    if(data=="success"){
-                        _this.colletBollean = true;
+            if(sessionStorage.getItem("userId")){
+                await $.ajax({
+                    url:"http://localhost:2014/collet/find",
+                    type:"GET",
+                    data:{
+                        userId:sessionStorage.getItem("userId"),
+                        colletType:1,
+                        colletId:sellerId
+                    },
+                    success:function(data){
+                        if(data=="success"){
+                            _this.colletBollean = true;
+                        }
                     }
-                }
-            });
+                });
+            }
+            
             //商品
 			await $.ajax({
                 url:"http://localhost:2014/find/goods/sellerId",
@@ -101,40 +104,51 @@
             //是否收藏店铺
             async isCollet(seller){
                 const _this = this;
-                if(this.colletBollean){
-                    await $.ajax({
-                        url:"http://localhost:2014/collet/delete",
-                        type:"post",
-                        data:{
-                            userId:sessionStorage.getItem("userId"),
-                            colletType:1,
-                            colletId:seller.sellerId
-                        },
-                        success:function(data){
-                            if(data=="success"){
-                                _this.colletBollean=false;
-                                Toast.success('取消收藏');
+                if(sessionStorage.getItem("userId")){
+                    if(this.colletBollean){
+                        await $.ajax({
+                            url:"http://localhost:2014/collet/delete",
+                            type:"post",
+                            data:{
+                                userId:sessionStorage.getItem("userId"),
+                                colletType:1,
+                                colletId:seller.sellerId
+                            },
+                            success:function(data){
+                                if(data=="success"){
+                                    _this.colletBollean=false;
+                                    Toast.success('取消收藏');
+                                }
                             }
-                        }
-                    });
+                        });
+                    }else{
+                        await $.ajax({
+                            url:"http://localhost:2014/collet/insert",
+                            type:"post",
+                            data:{
+                                userId:sessionStorage.getItem("userId"),
+                                colletType:1,
+                                colletId:seller.sellerId
+                            },
+                            success:function(data){
+                                if(data=="success"){
+                                    _this.colletBollean=true;
+                                    Toast.success('收藏成功');
+                                }
+                            }
+                        });
+                        
+                    }
                 }else{
-                    await $.ajax({
-                        url:"http://localhost:2014/collet/insert",
-                        type:"post",
-                        data:{
-                            userId:sessionStorage.getItem("userId"),
-                            colletType:1,
-                            colletId:seller.sellerId
-                        },
-                        success:function(data){
-                            if(data=="success"){
-                                _this.colletBollean=true;
-                                Toast.success('收藏成功');
-                            }
-                        }
-                    });
-                    
+                    Dialog.confirm({
+						title: '是否登陆',
+						message: '只有登陆才能操作此功能'
+						}).then(() => {
+							this.$router.push({path:'/login'});
+						}).catch(() => {
+					});
                 }
+                
             }
         }
     }
