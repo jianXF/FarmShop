@@ -34,7 +34,7 @@
 		</van-cell-group>
 		<van-button  type='primary' style='marginTop:1rem' @click='loginSubmit'>登  录</van-button>
 		<p class='selectType'>
-			<a href="">忘记密码</a>
+			<a @click="forget">忘记密码</a>
 			<a href="#/reg">注册账号</a>
 		</p>
     </div>
@@ -43,7 +43,7 @@
 
 <script>
 	import $ from "jquery";
-	import src from "../../img/user.jpg";
+	import src from "../../img/login.jpg";
 	import Vant from 'vant';
 	import { Toast  } from 'vant';
     export default{
@@ -109,14 +109,18 @@
 				}else{
 					Toast('请输入注册的手机号和密码');
 				}
-        	}
+        	},
+			//w忘记密码的事件
+			forget(){
+				Toast("请联系商城管理员");
+			}
         }
     }
 </script>
 <style scoped>
 	.heaer_img{
 		width:100%;
-		height:22rem;
+		height:18rem;
 		
 	}
 	.van-button--primary{

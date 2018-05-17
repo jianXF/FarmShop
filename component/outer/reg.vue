@@ -5,12 +5,12 @@
 		  left-arrow
 		  @click-left="onClickLeft"
 		/>
-        <img :src="src" class="heaer_img"/>
+        <img :src="regBack" class="heaer_img"/>
 		
 		<van-uploader :after-read="onRead" class="load_img">
 			<img :src="head_src" class="load_img">
 		</van-uploader>
-        <van-cell-group style="marginTop:2rem">
+        <van-cell-group >
 		  <van-field
 		  	style=''
 		    v-model="tel"
@@ -58,6 +58,7 @@
 <script>
 	import $ from "jquery";
 	import src from "../../img/user.jpg";
+	import regBack from "../../img/reg.jpg";
 	import Vant from 'vant';
 	import { Toast  } from 'vant';
     export default{
@@ -67,6 +68,7 @@
         data(){
         	return {
         		src:src,
+				regBack:regBack,
 				tel:'',
 				password:'',
 				repassword:'',
@@ -161,18 +163,19 @@
 <style scoped>
 	.heaer_img{
 		width:100%;
-		height:22rem;
+		height:18rem;
 		
 	}
 	.load_img{
 		position: fixed;
-		top:19rem;
+		top:14rem;
 		width:5rem;
 		height: 5rem;
 		border-radius: 50%;
 		border: 1px solid white;
 		left:50%;
 		margin-left: -2.5rem;
+		z-index: 10;
 	}
 	.van-button--primary{
 		background-color:#EE4F4F ;

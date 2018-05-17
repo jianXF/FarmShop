@@ -1,15 +1,14 @@
 <template>
   <swiper :options="swiperOption" ref="mySwiper" >
-<swiper-slide><img :src="imgsrc[0]" class="swipersrc"/></swiper-slide>
-<swiper-slide><img :src="imgsrc[1]" class="swipersrc"/></swiper-slide>
-<swiper-slide><img :src="imgsrc[0]" class="swipersrc"/></swiper-slide>
+<swiper-slide v-for="i in imgsrc"><img :src="i" class="swipersrc"/></swiper-slide>
+
 <div class="swiper-pagination" slot="pagination"></div>
  </swiper>
   
 </template>
 <script>
-	import src1 from "../../img/logo.jpg";
-	import src2 from "../../img/user.jpg";
+	import banner1 from "../../img/banner1.jpg";
+	import banner2 from "../../img/banner2.jpg";
 	import Vue from 'vue'
 	import VueAwesomeSwiper from 'vue-awesome-swiper';
 	Vue.use(VueAwesomeSwiper) 
@@ -22,7 +21,7 @@
 	 	},
     data(){
       return {
-      	imgsrc:[src1,src2],
+      	imgsrc:[banner1,banner2],
 		swiperOption: { //以下配置不懂的，可以去swiper官网看api，链接http://www.swiper.com.cn/api/
 		        notNextTick: true, 
 		        autoplay: {
