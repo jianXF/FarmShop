@@ -1,7 +1,7 @@
 <template>
     <div class="selllist" >
     <van-card 
-        v-for="i in sellerList"
+        v-for="i in sellerLists"
         style="backgroundColor:white"
         :title="i.sellerTitle"
         :desc="'共有'+i.goodNum+'件宝贝，总销量'+i.goodsell+'件'"  
@@ -24,12 +24,13 @@
         props:["sellerList","isCollet"],
 		data(){
 			return {
-                sellerLists:[]
+                sellerLists:this.sellerList
 			}
         },
         watch: {
-                sellerList(value) {
-                    this.sellerLists = value
+                sellerList:function(newVal,oldVal) {
+                    console.log('value',newVal);
+                    this.sellerLists = newVal;
                 }
             },
         methods:{
