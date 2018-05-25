@@ -7,7 +7,11 @@
                     left-arrow
                     @click-left="onClickLeft"
             />
-            <div class="address" @click="clickAddresslist">
+            <div class="address" @click="clickAddresslist" v-if="!addressInfo">
+                <p>暂未设置收货地址 , 请点击进行设置</p>
+                <p></p>
+            </div>
+            <div class="address" @click="clickAddresslist" v-if="addressInfo">
                 <p><span v-text="'收货人：'+addressInfo.name"></span><span v-text="addressInfo.tel"></span></p>
                 <p v-text="'收货地址：'+addressInfo.address"></p>
             </div>
@@ -72,9 +76,12 @@
                     userId:sessionStorage.getItem("userId")
 				},
 				success:function(data){
-                    _this.addressInfo = data;
-                    _this.addressInfo.address= data.province+data.city+data.county+data.address_detail;
-
+                    if(data){
+                        _this.addressInfo = data;
+                        _this.addressInfo.address= data.province+data.city+data.county+data.address_detail;
+                    }else{
+                        _this.addressInfo=undefined;
+                    }
 				}
             });
             const ids = this.$router.history.current.query.goodsId;
@@ -128,6 +135,10 @@
                 this.$router.go(-1);
             },
             async onSubmit(){
+                if(!this.addressInfo){
+                    Toast("未设置收货地址，请设置");
+                    return ;
+                }
                 const _this=this;
                 const carId = _this.$router.history.current.query.carId;
                 Dialog.confirm({

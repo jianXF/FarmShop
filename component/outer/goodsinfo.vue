@@ -92,7 +92,11 @@
         	</nav>
         	<p>
         		<span>购买数量</span>
-        		<span><i class="iconfont icon-add add_p" @click="addNum"></i><input type="text" v-model="xnum"/><i  class="iconfont icon-subtract sub_p" @click="subNum"></i></span>
+        		<span>
+					<i class="iconfont icon-add add_p" @click="addNum"></i>
+					<input type="text" v-model="xnum" @input="changeNum"/>
+					<i  class="iconfont icon-subtract sub_p" @click="subNum"></i>
+				</span>
         	</p>
         	<span @click="addCart">
         		确定
@@ -299,6 +303,12 @@
 					this.xnum--;
 				}
 	       },
+		   //改变输入框数量做判断
+		   changeNum(){
+			   if(this.xnum>this.goodsDate.stock){
+					Toast.fail('库存不足，不能添加');
+				}
+		   },
 	       //点击加入购物车，弹出选择数量框及蒙版
 	       showAdd(){
 			if(sessionStorage.getItem('userId')){
@@ -339,6 +349,10 @@
 	       },
 	       //点击确定添加到购物车，并选择框消失
 	       async addCart(){
+			   if(this.xnum>this.goodsDate.stock){
+					Toast.fail('库存不足，不能添加');
+					return ;
+				}
 			   const _this = this;
 			   const isrepeat = {bool:true,data:{}};
 			   if(this.type==1){

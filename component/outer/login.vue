@@ -1,7 +1,7 @@
 <template>
     <div>
     	<van-nav-bar
-		  title="登陆"
+		  title="登录"
 		  left-arrow
 		  @click-left="onClickLeft"
 		/>

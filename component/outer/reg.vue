@@ -49,7 +49,7 @@
 		<van-button  type='primary' style='marginTop:1rem' @click='regSubmit'>登  录</van-button>
 		<p class='selectType'>
 			<a href=""></a>
-			<a href="#/login">登录</a>
+			<a href="#/login">注册</a>
 		</p>
     </div>
   

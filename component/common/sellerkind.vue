@@ -7,7 +7,7 @@
 		<ul>
 			<a v-for="i in seller"  @click="clickSellerinfo(i)">
 				<img :src="i.img"  />
-				<p v-text="i.sellerTitle"></p>
+				<!-- <p v-text="i.sellerTitle"></p> -->
 			</a>
 		</ul>
 	</div>

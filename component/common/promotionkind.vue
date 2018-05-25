@@ -105,7 +105,7 @@
 	text-align: left;
 }
 .promotion>ul>a>p span{
-	font-size: 2rem;
+	font-size: 1.6rem;
 	color:#EE4F4F;
 	
 }

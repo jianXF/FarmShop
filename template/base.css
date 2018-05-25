@@ -92,9 +92,6 @@ i,em{
 .order .van-button .van-button__text{
 	font-size: 1.6rem;
 }
-.van-address-edit .van-button .van-button__text{
-	color: #000;
-}
 
 .van-card__footer .van-button__text{
 	color:#000;
@@ -106,4 +103,18 @@ i,em{
 
 .giveGrade .van-rate__item{
     padding:7px 2px;
+}
+.van-address-edit-detail__finish{
+	display: none;
+}
+.van-address-list .van-radio .van-icon-checked{
+	color:#EE4F4F;
+}
+#box .van-address-list__add .van-icon-add{
+	color:#EE4F4F;
+}
+.van-address-edit .van-button--primary{
+	background: #EE4F4F;
+	border-color: #EE4F4F;
+	color: white;
 }

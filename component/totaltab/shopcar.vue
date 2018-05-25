@@ -21,7 +21,11 @@
 						<p>运费{{i.delivery}}</p>
 						<p>
 							<span>￥{{i.isBargain==0?i.price_o:i.price_n}}</span>
-							<span><i class="iconfont icon-add add_p" @click="addNum(i.carId)"></i><input type="text" v-model="i.buyNum"/><i  class="iconfont icon-subtract sub_p" @click="subNum(i.carId)"></i></span>
+							<span>
+								<i class="iconfont icon-add add_p" @click="addNum(i.carId)"></i>
+								<input type="text" v-model="i.buyNum" disabled/>
+								<i  class="iconfont icon-subtract sub_p" @click="subNum(i.carId)"></i>
+							</span>
 						</p>
 					</div>
 				</li>
@@ -179,7 +183,8 @@
         		
         	},
         //点击添加数量按钮
-        addNum(carId){
+        async addNum(carId){
+			const _this =this;
         	for(var i in this.goodsList){
         		if(this.goodsList[i].carId==carId){
 					if(this.goodsList[i].isSell==0||this.goodsList[i].status!=2){
@@ -200,13 +205,26 @@
 							}
 						}
 					}
-					
-        			this.goodsList[i].buyNum++;
+					await $.ajax({
+						url:"http://localhost:2014/updateCart",
+						type:"POST",
+						data:{
+							carId:carId,
+							buyNum:_this.goodsList[i].buyNum+1,
+							type:'2'
+						},
+						success:function(data){
+							if(data == 'success'){
+								_this.goodsList[i].buyNum++;
+							}
+						}
+					});
         		}
 			}
         },
          //点击减少数量事件按钮
-        subNum(carId){
+        async subNum(carId){
+			const _this= this;
         	for(var i in this.goodsList){
     			if(this.goodsList[i].carId==carId){
 					if(this.goodsList[i].isSell==0||this.goodsList[i].status!=2){
@@ -226,8 +244,20 @@
 								}
 							}
 					}
-						
-    					this.goodsList[i].buyNum--;
+						await $.ajax({
+							url:"http://localhost:2014/updateCart",
+							type:"POST",
+							data:{
+								carId:carId,
+								buyNum:_this.goodsList[i].buyNum-1,
+								type:'2'
+							},
+							success:function(data){
+								if(data == 'success'){
+									_this.goodsList[i].buyNum--;
+								}
+							}
+						});
     				}
     			}
 			}	

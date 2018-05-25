@@ -62,26 +62,24 @@
 			>
 			<van-steps direction="vertical" :active="orderInfo.status-1" active-color="#f60">
 				<van-step>
-					<h3>订单生产</h3>
-					<p v-text="'订单编号：'+orderInfo.goodsId"></p>
-					<p v-text="orderInfo.status<=5?orderInfo.orderTime.substr(0,8):''"></p>
+					<h3>订单生产<span class="titleR" v-text="orderInfo.status<=5?orderInfo.orderTime.substr(0,8):''"></span></h3>
+					<p v-text="'订单编号：'+orderInfo.goodsId">	</p>
+					<p v-text="orderInfo.addressName+' : '+orderInfo.addressTel"></p>
+					<p v-text="orderInfo.address"></p>
 				</van-step>
 				<van-step>
-					<h3>付款</h3>
-					<p v-text="orderInfo.status<=5&&orderInfo.status>1?orderInfo.buyTime.substr(0,8):''"></p>
+					<h3>付款<span class="titleR" v-text="orderInfo.status<=5&&orderInfo.status>1?orderInfo.buyTime.substr(0,8):''"></span></h3>
+					
 				</van-step>
 				<van-step>
-					<h3>卖家发货</h3>
-					<p v-text="orderInfo.status<=5&&orderInfo.status>2?orderInfo.deliveryName+':'+orderInfo.sendTime.substr(0,8):''"></p>
-					<p v-text="orderInfo.status<=5&&orderInfo.status>2?'快递单号：'+orderInfo.deliveryId:''"></p>
+					<h3>卖家发货 <span class="titleR"  v-text="orderInfo.status<=5&&orderInfo.status>2?orderInfo.sendTime.substr(0,8):''"></span></h3>
+					<p v-text="orderInfo.status<=5&&orderInfo.status>2?orderInfo.deliveryName+' : '+orderInfo.deliveryId:''"></p>
 				</van-step>
 				<van-step>
-					<h3>收货</h3>
-					<p v-text="orderInfo.status<=5&&orderInfo.status>3?orderInfo.getTime.substr(0,8):''"></p>
+					<h3>收货 <span class="titleR" v-text="orderInfo.status<=5&&orderInfo.status>3?orderInfo.getTime.substr(0,8):''"></span></h3>
 				</van-step>
 				<van-step>
-					<h3 >评价</h3>
-					<p v-text="orderInfo.status==5?orderInfo.evaTime.substr(0,8):''"></p>
+					<h3 >评价<span class="titleR" v-text="orderInfo.status==5?orderInfo.evaTime.substr(0,8):''"></span></h3>
 					<p v-text="orderInfo.status==5?orderInfo.content:''"></p>	
 				</van-step>
 			</van-steps>
@@ -490,5 +488,10 @@ section>.p_c{
 }
 .van-step p{
 	font-size: 1.2rem;
+}
+.titleR{
+	float: right;
+	font-size: 1.2rem;
+	margin-right: 5px;
 }
 </style>

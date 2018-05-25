@@ -110,7 +110,7 @@
                                     },
                                     success:function(data){
                                         if(data=="success"){
-                                            Toast.success("反馈/留言成功");
+                                            Toast.success("反馈成功");
                                             _this.message="";
                                             _this.orderId="";
                                         }
@@ -119,7 +119,38 @@
                             }
                         }
                     });
+                }else{
+                    await $.ajax({
+                        url:"http://localhost:2014/feedback/insert",
+                        type:"POST",
+                        data:{
+                            userId:sessionStorage.getItem("userId"),
+                            content:_this.message,
+                            orderId:undefined
+                            
+                        },
+                        success:function(data){
+                            if(data=="success"){
+                                Toast.success("留言成功");
+                                _this.message="";
+                                _this.orderId="";
+                            }
+                        }
+                    });
                 }
+                await $.ajax({
+                    url:"http://localhost:2014/feedbackAll",
+                    type:"get",
+                    data:{
+                        userId:sessionStorage.getItem("userId")
+                        
+                    },
+                    success:function(data){
+                        _this.feedList = data;
+
+                        console.log(data);
+                    }
+                });
                 
                 
             }
